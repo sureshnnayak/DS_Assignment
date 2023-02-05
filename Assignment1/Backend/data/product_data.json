@@ -1,0 +1,34 @@
+[
+    {
+        "itemName": "Joggers",
+        "itemCategory": "Clothing",
+        "itemId": "c2",
+        "keywords": [
+            "pyjamas",
+            "pants",
+            "woolen",
+            "warmth"
+        ],
+        "condition": "new",
+        "salePrice": 15.99,
+        "quantity": 5,
+        "itemOnSale": "true"
+    },
+    {
+        "itemName": "Joggers-2",
+        "itemCategory": "Clothing",
+        "itemId": "c2",
+        "keywords": [
+            "pyjamas",
+            "pants",
+            "woolen",
+            "warmth"
+        ],
+        "condition": "new",
+        "salePrice": 17,
+        "quantity": 5,
+        "itemOnSale": "true"
+
+    }
+   
+]
