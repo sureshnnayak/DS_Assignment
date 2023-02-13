@@ -12,8 +12,8 @@ var customerDB  = require('../Backend/startCustomerDB');
 var productDB  = require('../Backend/startProductDB');
 var transactionDB  = require('../Backend/startTransactionsDB');
 
-
-var cart = null
+var newUser = {userId: "suresh", products: ["c1"]}
+var cart = [newUser];
 
 var server  = net.createServer( function(socket) {
 	socket.on('data', async function(data) {

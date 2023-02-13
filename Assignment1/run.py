@@ -3,6 +3,13 @@ import time
 
 processes = []
 
+
+import time
+start_time = time.time()
+
+
+
+
 # Number of instances to spawn
 num_instances = 1
 # Command to run
@@ -12,18 +19,20 @@ for i in range(num_instances):
     # Spawn a process
     print(f"Spawning process {i} with command: {command}")
     p = subprocess.Popen(command, stdin=subprocess.PIPE, shell=True)
-    p.stdin.write(b"2\n")
-    p.stdin.write(b"suresh\n")
-    p.stdin.write(b"suresh\n")
-    time.sleep(1)
+    # p.stdin.write(b"2\n")
+    # p.stdin.write(b"suresh\n")
+    # p.stdin.write(b"suresh\n")
+    # time.sleep(1)
     p.stdin.write(b"8\n")
 
     p.stdin.flush()
+print("----------------- %s seconds ------------------" % (time.time() - start_time))
+time.sleep(1)
     # p.stdin.write(b"13\n")
     # p.stdin.flush()
-    time.sleep(1)
+
     #processes.append(p)
-time.sleep(5)
+
 # Provide input to each process
 # for p in processes:
     
