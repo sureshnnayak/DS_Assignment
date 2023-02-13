@@ -34,9 +34,7 @@ var server  = net.createServer( function(socket) {
                 user = await getUser(data);
                 console.log(user,"logged in");
                 
-				//user = customerDB.getUser(req.data.username)
-                console.log(user);
-                console.log( req.data);
+
 				if (user != null && user.password == req.data.password) {
                     newUser = {userId: req.data.userId, products: [req.data.itemId]}
                     if(cart == null){

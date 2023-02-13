@@ -69,7 +69,7 @@ const printOptions = (serverConnection) => {
 				});
 				break;
 			case "2":
-				console.log("Login");
+				//console.log("Login");
 				rl.question("Enter username: ", (username) => {
 					userId = username;
 					rl.question("Enter password: ", (password) => {
@@ -103,7 +103,7 @@ const printOptions = (serverConnection) => {
 				});
 				break;
 			case "5":
-				console.log("Add item to the shopping cart");
+				//console.log("Add item to the shopping cart");
 				rl.question("Enter item id: ", (itemId) => {
 					rl.question("Enter quantity: ", (quantity) => {
 						const clData = {
@@ -200,10 +200,12 @@ const printOptions = (serverConnection) => {
 				break;
 
 			case "13":
+
 			default:
 				console.log("Exiting...");
 				serverConnection.destroy();
-				break;
+				//break;
+				return;
 
 		}
 	});
@@ -214,7 +216,7 @@ const printOptions = (serverConnection) => {
 function handleResponce(res, buyerServer){
 	switch(res.responceType){
 		case "SUUCESS":
-			console.log(res.meaaage);
+			//console.log(res.meaaage);
 			break;
 		case "ERROR":
 			console.log(res.message);
