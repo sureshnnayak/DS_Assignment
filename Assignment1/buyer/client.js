@@ -40,20 +40,20 @@ const {    createAcccountMSG,
 
 	userId = null;
 const printOptions = (serverConnection) => {
-	// console.log("Please select an option:");
-	// console.log("1. Create an account");
-	// console.log("2. Login");
-	// console.log("3. Logout");
-	// console.log("4. Search items for sale");
-	// console.log("5. Add item to the shopping cart");
-	// console.log("6. Remove item from the shopping cart");
-	// console.log("7. Clear the shopping cart");
-	// console.log("8. Display shopping cart");
-	// console.log("9. Make purchase");
-	// console.log("10. Provide feedback");
-	// console.log("11. Get seller rating");
-	// console.log("12. Get buyer purchase history");
-	// console.log("13. Exit");
+	console.log("Please select an option:");
+	console.log("1. Create an account");
+	console.log("2. Login");
+	console.log("3. Logout");
+	console.log("4. Search items for sale");
+	console.log("5. Add item to the shopping cart");
+	console.log("6. Remove item from the shopping cart");
+	console.log("7. Clear the shopping cart");
+	console.log("8. Display shopping cart");
+	console.log("9. Make purchase");
+	console.log("10. Provide feedback");
+	console.log("11. Get seller rating");
+	console.log("12. Get buyer purchase history");
+	console.log("13. Exit");
 	rl.question("Enter your option: ", (option) => {
 		switch(option){
 			case "1":
