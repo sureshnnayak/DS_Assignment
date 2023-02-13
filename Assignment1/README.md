@@ -30,53 +30,6 @@ System Design
 2. Buyer/Seller client-server
 The client to begin with connects to a server, and then gives the user a set of operation options to perform, based on the users choice the client either asks for more information or sends the request to the server. The server opens a TCP connection accepting any clients who want to connect. When a request is received from client, based on the messageId, the request gets routed to the right worker which then requests data from the database server. This process is synchronized using Promises, the data is received and worked on by the server and it then returns the data as a ResponseMessage to client.
 
-Sample Message Protocol:
-
-```
----------------RequestCompletedMSG--------------- 
-{
-    msgId: "REQUEST_COMPLETED",
-		completedRequestId,
-		data
-}
-```
-```
----------------AddItemToCartMSG---------------
-{
-		msgId: "ADD_TO_CART",
-		data
-}
-```
-```
----------------removeItemFromCartMSG---------------
-{
-		msgId: "REMOVE_FROM_CART",
-		data
-}
-```
-
-Sample of how Promises are used for Communication between Server and Database
-
-```
-const getData = async (dataId) => {
-	return new Promise((resolve, reject) => {
-		const connection = getConnection("dataConnection");
-		connection.write(JSON.stringify(getDataMSG(dataId)))
-		connection.on('data', function (response) {
-			res = JSON.parse(response);
-			resolve(res);
-		});
-	});	
-};
-
-const updateData = async (dataId, newData) => {
-	return new Promise((resolve, reject) => {
-		const connection = getConnection("updateDataConnection");
-		connection.write(JSON.stringify(updateDataMSG(dataId, newData)))
-		resolve()
-	});	
-};
-```
 
 # Latency Details
 ## BUYER
