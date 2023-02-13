@@ -1,5 +1,9 @@
-//
-buyer
-seller
-feedbacl
-transaction ID
+[
+    {
+        "transactionId": "1",
+        "seller": "suresh",
+        "buyer": "CREDIT",
+        "rating": "1000",
+        "ptoduct" : "product1"
+    }
+]

@@ -25,6 +25,20 @@ Get seller rating: provide seller id
 Get buyer purchase history 
 */
 
+const {    createAcccountMSG,
+    getLoginMSG,
+    getLogoutMSG,
+    getSearchItemsMSG,
+    getAddItemToCartMSG,
+    getRemoveItemFromCartMSG,
+    getClearCartMSG,
+    getDisplayCartMSG,
+    getPurchaseCartMSG,
+    getProvideFeedbackMSG,
+    getViewFeedbackMSG,
+    getViewPurchaseHistoryMSG} = require('./messages');
+
+	userId = null;
 const printOptions = (serverConnection) => {
 	console.log("Please select an option:");
 	console.log("1. Create an account");
@@ -47,24 +61,23 @@ const printOptions = (serverConnection) => {
 				rl.question("Enter username: ", (username) => {
 					rl.question("Enter password: ", (password) => {
 						const clData = {
-							requestType: "CREATE_ACCOUNT",
 							username: username,
 							password: password
 						};
-						serverConnection.write(JSON.stringify(clData));
+						serverConnection.write(JSON.stringify(createAcccountMSG(clData)));
 					});
 				});
 				break;
 			case "2":
 				console.log("Login");
 				rl.question("Enter username: ", (username) => {
+					userId = username;
 					rl.question("Enter password: ", (password) => {
 						const clData = {
-							requestType: "LOGIN",
 							username: username,
 							password: password
 						};
-						serverConnection.write(JSON.stringify(clData));
+						serverConnection.write(JSON.stringify(getLoginMSG(clData)));
 					});
 				});
 				break;
@@ -74,7 +87,7 @@ const printOptions = (serverConnection) => {
 				const clData = {
 					requestType: "LOGOUT"
 				};
-				serverConnection.write(JSON.stringify(clData));
+				serverConnection.write(JSON.stringify(getLogoutMSG(clData)));
 				break;
 
 			case "4":
@@ -82,12 +95,10 @@ const printOptions = (serverConnection) => {
 				rl.question("Enter item category: ", (itemCategory) => {
 					rl.question("Enter up to five keywords: ", (keywords) => {
 						const clData = {
-							requestType: "SEARCH_ITEMS",
-
 							itemCategory: itemCategory,
 							keywords: keywords
 						};
-						serverConnection.write(JSON.stringify(clData));
+						serverConnection.write(JSON.stringify(getSearchItemsMSG(clData)));
 					});
 				});
 				break;
@@ -96,11 +107,11 @@ const printOptions = (serverConnection) => {
 				rl.question("Enter item id: ", (itemId) => {
 					rl.question("Enter quantity: ", (quantity) => {
 						const clData = {
-							requestType: "ADD_ITEM_TO_CART",
 							itemId: itemId,
+							userId: userId,
 							quantity: quantity
 						};
-						serverConnection.write(JSON.stringify(clData));
+						serverConnection.write(JSON.stringify(getAddItemToCartMSG(clData)));
 					});
 				});
 				break;
@@ -110,11 +121,11 @@ const printOptions = (serverConnection) => {
 				rl.question("Enter item id: ", (itemId) => {
 					rl.question("Enter quantity: ", (quantity) => {
 						const clData = {
-							requestType: "REMOVE_ITEM_FROM_CART",
 							itemId: itemId,
+							userId: userId,
 							quantity: quantity
 						};
-						serverConnection.write(JSON.stringify(clData));
+						serverConnection.write(JSON.stringify(getRemoveItemFromCartMSG(clData)));
 					});
 				});
 				break;
@@ -123,9 +134,9 @@ const printOptions = (serverConnection) => {
 			case "7":{
 				console.log("Clear the shopping cart");
 				const clData = {
-					requestType: "CLEAR_CART"
+					userId: userId,
 				};
-				serverConnection.write(JSON.stringify(clData));
+				serverConnection.write(JSON.stringify(getClearCartMSG(clData)));
 				break;
 			}
 
@@ -133,9 +144,10 @@ const printOptions = (serverConnection) => {
 				{
 					console.log("Display shopping cart");
 				const clData = {
-					requestType: "DISPLAY_CART"
+					userId: userId,
+					
 				};
-				serverConnection.write(JSON.stringify(clData));
+				serverConnection.write(JSON.stringify(getDisplayCartMSG(clData)));
 				break;
 			}
 
@@ -144,7 +156,7 @@ const printOptions = (serverConnection) => {
 				const clData = {
 					requestType: "MAKE_PURCHASE"
 				};
-				serverConnection.write(JSON.stringify(clData));
+				serverConnection.write(JSON.stringify(getPurchaseCartMSG(clData)));
 				break;
 			}
 			
@@ -154,13 +166,12 @@ const printOptions = (serverConnection) => {
 					rl.question("Enter rating: ", (rating) => {
 						rl.question("Enter comment: ", (comment) => {
 							const clData = {
-								requestType: "PROVIDE_FEEDBACK",
-
+								userId: userId,
 								itemId: itemId,
 								rating: rating,
 								comment: comment
 							};
-							serverConnection.write(JSON.stringify(clData));
+							serverConnection.write(JSON.stringify(getProvideFeedbackMSG(clData)));
 						});
 					});
 				});
@@ -171,19 +182,20 @@ const printOptions = (serverConnection) => {
 				rl.question("Enter item id: ", (itemId) => {
 					const clData = {
 						requestType: "VIEW_FEEDBACK",
-						itemId: itemId
+						itemId: itemId,
+						userId: userId
 					};
-					serverConnection.write(JSON.stringify(clData));
+					serverConnection.write(JSON.stringify(getViewFeedbackMSG(clData)));
 				});
 				break;
 
 			case "12":
 				console.log("View purchase history");
-				rl.question("Enter item id: ", (itemId) => {
+				rl.question("Enter user id: ", (userId) => {
 					const clData = {
-						requestType: "VIEW_PURCHASE_HISTORY"
+						userId: userId
 					};
-					serverConnection.write(JSON.stringify(clData));
+					serverConnection.write(JSON.stringify(getViewPurchaseHistoryMSG(clData)));
 				});
 				break;
 
@@ -225,7 +237,7 @@ function handleResponce(res, buyerServer){
 function getConnection(){
 
 	var buyerServer = new net.Socket();
-	buyerServer.connect(1338, 'localhost', function() {
+	buyerServer.connect(1337, 'localhost', function() {
 		console.log('Connected');
 		//buyerServer.write(JSON.stringify(clData));
 	});
@@ -256,7 +268,7 @@ function sleep(ms) {
 
 const start = async () => {
 	console.log("Welcome to the shopping system");
-	await sleep(2000);	
+	//await sleep(2000);	
 	const buyerServer = getConnection();
 	printOptions(buyerServer);
 	

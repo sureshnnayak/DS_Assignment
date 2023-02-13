@@ -1,16 +1,23 @@
 [
     {
         "username": "amazon",
-        "pass": "amazon",
+        "password": "amazon",
         "category": "seller"
     },
+    
     {
         "username": "suresh",
-        "pass": "suresh",
+        "password": "suresh",
         "category": "buyer"
     },
+
     {
         "username": "su",
         "password": "su"
+    },
+ 
+    {
+        "username": "suresh",
+        "password": "suresh"
     }
 ]

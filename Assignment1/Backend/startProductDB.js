@@ -3,7 +3,7 @@
 const fs = require("fs");
 
 // Storing the JSON format data in myObject
-var productData = fs.readFileSync("./data/product_data.json");
+var productData = fs.readFileSync("../Backend/data/product_data.json");
 var productDataObject = JSON.parse(productData);
 
 
@@ -40,7 +40,7 @@ function changeSalePrice(productId, salePrice){
 function getProductOnSale(keywords){
     var productsOnSale = [];
     for (var i = 0; i < productDataObject.length; i++){
-        if (productDataObject[i].itemOnSale == "true" && productDataObject[i].keywords.includes(keywords)){
+        if ( productDataObject[i].keywords.includes(keywords)){
             productsOnSale.push(productDataObject[i]);
         }
     }
@@ -76,11 +76,31 @@ function removeItemFromSale(productId){
     });
 }
 
+function searchProducts(keywords){
+    var products = [];
+    for (var i = 0; i < productDataObject.length; i++){
+        if (productDataObject[i].keywords.includes(keywords)){
+            products.push(productDataObject[i]);
+        }
+    }
+    return products;
+}
+
+function getProductSeller(productId){
+    for (var i = 0; i < productDataObject.length; i++){
+        if (productDataObject[i].itemId == productId){
+            return productDataObject[i].seller;
+        }
+    }
+}
+
 
 module.exports = {  updateProductQuantity,
      getProductOnSale, 
      changeSalePrice, 
      putItemOnSale, 
-     removeItemFromSale  
+     removeItemFromSale,
+     searchProducts,
+     getProductSeller
     };
   
