@@ -1,0 +1,15 @@
+syntax = "proto3"
+
+package custServer;
+
+service addSeller {
+    rpc addSeller (sellerName) returns (status){}
+}
+
+message sellerName {
+    string field = 1;
+}
+
+message status {
+    string field = 1;
+}

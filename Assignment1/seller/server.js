@@ -1,102 +1,114 @@
-var net = require('net');
+var net = require("net");
 
-const process = require('process')
-process.chdir(__dirname)
-console.log(process.cwd())
-var customerDB  = require('../Backend/startCustomerDB')
-var productDB  = require('../Backend/startProductDB')
-var transactionDB  = require('../Backend/startTransactionDB')
+const process = require("process");
+const express = require("express");
+const bp = require('body-parser')
 
 
 
-var server  = net.createServer(function(socket) {
-	socket.on('data', function(data) {
-		//console.log('Received: ' + data);
-		const req = JSON.parse(data);
-		console.log(req);
-		switch(req.requestType){
-            case "CREATE_ACCOUNT":
-                console.log("Creating account");
-				customerDB.addUser(req.data)
-				newData = { "responseType": "SUCCESS",
-				"message": "Request processed successfully"};
-                break;
+const port = 1338;
 
-            case "LOGIN":
-				user = customerDB.getUser(req.data.username)
-				if (user != null && user.password == req.data.password) {
-					newData = { "responseType": "SUCCESS",
-					"message": "Request processed successfully"};
-				} else {
-					newData = { "responseType": "FAILURE",
-					"message": "Invalid username or password"};
-				}
-				console.log("Logging in");
-                break;
+process.chdir(__dirname);
+console.log(process.cwd());
 
-            case "LOGOUT":
-                console.log("Logging out");
-                break;
+var customerDB = require("../Backend/startCustomerDB");
+var productDB = require("../Backend/startProductDB");
+var transactionDB = require("../Backend/startTransactionsDB");
+const { json } = require("express");
 
-            case "GET_SELLER_RATING":
-				newData = { "responseType": "SUCCESS",
-					"sellerRating": transactionDB.getSellerRating(req.data.username)
-				};			
-                console.log("Sending seller rating");
-                break;
+const app = express();
+app.use(bp.json())
+app.use(bp.urlencoded({ extended: true }))
 
-            case "PUT_ITEM_FOR_SALE":
-				productDB.putItemForSale(req.data.productId)
-				newData = { "responseType": "SUCCESS",
-					"message": "Request processed successfully"};
+app.post("/createAccount", (req, res) => {
+  // res.send('Hello World!')
+  console.log("Creating account");
+  
+  req.body.id = req.body.username + Date.now();
+  req.body.feedbackNeg = 0
+  req.body.feedbackPos = 0
 
-                console.log("Adding item for sale");
-                break;
+  customerDB.addUser(req.body);
+  newData = {
+	responseType: "SUCCESS",
+	message: "Request processed successfully",
+  };
 
-            case "REMOVE_ITEM_FROM_SALE":
-				productDB.removeItemFromSale(req.data.productID)
-				newData = { "responseType": "SUCCESS",
-					"message": "Request processed successfully"};
-
-                console.log("Removing item from sale");
-                break;
-
-            case "DISPLAY_ITEMS_FOR_SALE":
-				//based on seller id
-				productOnSale = productDB.getProductOnSale(req.data.username)  
-				newData = { 
-					"responseType": "SUCCESS",
-				data : productOnSale
-				};
-                console.log("Displaying items for sale");
-                break;
-        }
-
-		socket.write(JSON.stringify(newData));
-		
-
-	});
-
-	socket.on('close', function(data) {
-		console.log('Connection closed');
-	});
-
-	socket.on('error', function (error) {
-		console.error(JSON.stringify(error));
-	});
+  res.send(200,newData);
 });
 
+app.post("/login", (req, res) => {
+  // res.send('Hello World!')
+  user = customerDB.getUser(req.body.username);
+  if (user != null && user.password == req.body.password) {
+	newData = {
+	  responseType: "SUCCESS",
+	  message: "Request processed successfully",
+	};
+  } else {
+	newData = {
+	  responseType: "FAILURE",
+	  message: "Invalid username or password",
+	};
+  }
 
+  res.send(200,newData);
+  console.log("Logging in");
+});
 
-server.listen(1338, function(){
-
-	console.log('Server listening on port 1337');
-
-	server.	on('error', function (error) {
-		console.error(JSON.stringify(error));
-	});
-	server.on('close', function (error) {
-		console.error(JSON.stringify(error));
-	});
+app.post("/logout", (req, res) => {
+  // res.send('Hello World!')
+  console.log("Logging out");
+  res.send(200)
 
 });
+
+app.post("/getSellerRating", (req, res) => {
+  // res.send('Hello World!')
+  newData = {
+	responseType: "SUCCESS",
+	sellerRating: transactionDB.getSellerRating(req.body.username),
+  };
+  console.log("Sending seller rating");
+  res.send(200,newData);
+});
+
+app.post("/addItemToSale", (req, res) => {
+  // res.send('Hello World!')
+  productDB.putItemForSale(req.body.productId);
+  newData = {
+	responseType: "SUCCESS",
+	message: "Request processed successfully",
+  };
+
+  console.log("Adding item for sale");
+  res.send(200,newData);
+});
+
+app.post("/removeItemFromSale", (req, res) => {
+  // res.send('Hello World!')
+  productDB.removeItemFromSale(req.body.productID);
+  newData = {
+	responseType: "SUCCESS",
+	message: "Request processed successfully",
+  };
+
+  console.log("Removing item from sale");
+  res.send(200,newData);
+});
+
+app.post("/getProductsOnSale", (req, res) => {
+  // res.send('Hello World!')
+  productOnSale = productDB.getProductOnSale(req.body.username);
+  newData = {
+	responseType: "SUCCESS",
+	data: productOnSale,
+  };
+  console.log("Displaying items for sale");
+  res.send(200,newData);
+});
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
+
