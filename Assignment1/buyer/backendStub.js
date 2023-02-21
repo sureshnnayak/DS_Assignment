@@ -154,6 +154,8 @@ function getSellerRating(data){
     });
 }
 
+
+
 function getFeedback(data){
     return new Promise((resolve, reject) => {
         transactionDbServerServer.write(data);

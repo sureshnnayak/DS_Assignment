@@ -2,6 +2,7 @@ var net = require('net');
 
 
 const readline = require('readline');
+const axios = require("axios").default;
 
 const rl = readline.createInterface({
 	input: process.stdin,
@@ -54,17 +55,26 @@ const printOptions = (serverConnection) => {
 	console.log("11. Get seller rating");
 	console.log("12. Get buyer purchase history");
 	console.log("13. Exit");
-	rl.question("Enter your option: ", (option) => {
+	rl.question("Enter your option:", (option) => {
 		switch(option){
 			case "1":
 				console.log("Create an account");
 				rl.question("Enter username: ", (username) => {
 					rl.question("Enter password: ", (password) => {
-						const clData = {
+						const data = {
 							username: username,
-							password: password
+							password: password,
+							//category: "buyer"
 						};
-						serverConnection.write(JSON.stringify(createAcccountMSG(clData)));
+						axios
+						.post("http://localhost:1337/createAccount", data)
+						.then(function (response) {
+						  console.log(response.data);
+						  printOptions();
+						})
+						.catch(function (error) {
+						  console.log(error);
+						});
 					});
 				});
 				break;
@@ -73,22 +83,36 @@ const printOptions = (serverConnection) => {
 				rl.question("Enter username: ", (username) => {
 					userId = username;
 					rl.question("Enter password: ", (password) => {
-						const clData = {
+						const data = {
 							username: username,
 							password: password
 						};
-						serverConnection.write(JSON.stringify(getLoginMSG(clData)));
-					});
+						axios
+						.post("http://localhost:1337/createAccount", data)
+						.then(function (response) {
+						  console.log(response.data);
+						  printOptions();
+						})
+						.catch(function (error) {
+						  console.log(error);
+						});					});
 				});
 				break;
 
 			case "3":
 				console.log("Logout");
-				const clData = {
+				const data = {
 					requestType: "LOGOUT"
 				};
-				serverConnection.write(JSON.stringify(getLogoutMSG(clData)));
-				break;
+				axios
+				.post("http://localhost:1337/createAccount", data)
+				.then(function (response) {
+				  console.log(response.data);
+				  printOptions();
+				})
+				.catch(function (error) {
+				  console.log(error);
+				});				break;
 
 			case "4":
 				console.log("Search items for sale");
