@@ -12,7 +12,7 @@ var customerDB  = require('../Backend/startCustomerDB');
 var productDB  = require('../Backend/startProductDB');
 var transactionDB  = require('../Backend/startTransactionsDB');
 
-var newUser = {userId: "suresh", products: ["c1"]}
+//var newUser = {userId: "suresh", products: ["c1"]}
 var cart = [newUser];
 
 var server  = net.createServer( function(socket) {

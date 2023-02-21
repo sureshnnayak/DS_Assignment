@@ -16,7 +16,7 @@ function updateProductQuantity(productId, quantity){
         }
     }
     var newData2 = JSON.stringify(productDataObject);
-    fs.writeFile("./data/product_data.json", newData2, (err) => {
+    fs.writeFile("../Backend/data/product_data.json", newData2, (err) => {
       // Error checking
       if (err) throw err;
       console.log("Product data updated");
@@ -30,7 +30,7 @@ function changeSalePrice(productId, salePrice){
         }
     }
     var newData2 = JSON.stringify(productDataObject);
-    fs.writeFile("./data/product_data.json", newData2, (err) => {
+    fs.writeFile("../Backend/data/product_data.json", newData2, (err) => {
       // Error checking
       if (err) throw err;
       console.log("Product data updated");
@@ -40,22 +40,22 @@ function changeSalePrice(productId, salePrice){
 function getProductOnSale(keywords){
     var productsOnSale = [];
     for (var i = 0; i < productDataObject.length; i++){
-        if ( productDataObject[i].keywords.includes(keywords)){
+        //if ( productDataObject[i].keywords.includes(keywords)){
             productsOnSale.push(productDataObject[i]);
-        }
+        //}
     }
     return productsOnSale;
 }
 
 
-function putItemOnSale(productId){
+function putItemForSale(productId){
     for (var i = 0; i < productDataObject.length; i++){
         if (productDataObject[i].itemId == productId){
             productDataObject[i].itemOnSale = "true";
         }
     }
     var newData2 = JSON.stringify(productDataObject);
-    fs.writeFile("./data/product_data.json", newData2, (err) => {
+    fs.writeFile("../Backend/data/product_data.json", newData2, (err) => {
       // Error checking
       if (err) throw err;
       console.log("Product data updated");
@@ -69,7 +69,7 @@ function removeItemFromSale(productId){
         }       
     }
     var newData2 = JSON.stringify(productDataObject);
-    fs.writeFile("./data/product_data.json", newData2, (err) => {
+    fs.writeFile("../Backend/data/product_data.json", newData2, (err) => {
         // Error checking
         if (err) throw err;
         console.log("Product data updated");
@@ -98,7 +98,7 @@ function getProductSeller(productId){
 module.exports = {  updateProductQuantity,
      getProductOnSale, 
      changeSalePrice, 
-     putItemOnSale, 
+     putItemForSale, 
      removeItemFromSale,
      searchProducts,
      getProductSeller
