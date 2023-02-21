@@ -6,13 +6,11 @@ var customerDataObject = JSON.parse(customerData);
 
 function addUser(user) {
   customerDataObject.push(user);
-  console.log(customerDataObject);
-  console.log("User added");
+  console.log("User added",user);
   fs.writeFileSync("../Backend/data/customer_data.json", JSON.stringify(customerDataObject));
 }
 
 function getUser(username) {
-    console.log(username);
     for (var i = 0; i < customerDataObject.length; i++) {
         if (customerDataObject[i].username == username) {
             return customerDataObject[i];
@@ -20,6 +18,8 @@ function getUser(username) {
     }
     return null;
 }
+
+
 
 
 module.exports = { addUser, getUser };
