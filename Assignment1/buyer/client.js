@@ -1,3 +1,5 @@
+
+//Buyer Client
 var net = require('net');
 
 
@@ -144,14 +146,15 @@ const printOptions = (serverConnection) => {
 							quantity: quantity
 						};
 						axios
-						.post("http://localhost:1337/createAccount", data)
+						.post("http://localhost:1337/addToCart", data)
 						.then(function (response) {
 						  console.log(response.data);
 						  printOptions();
 						})
 						.catch(function (error) {
 						  console.log(error);
-						});						});
+						});						
+					});
 				});
 				break;
 
@@ -165,7 +168,7 @@ const printOptions = (serverConnection) => {
 							quantity: quantity
 						};
 						axios
-						.post("http://localhost:1337/createAccount", data)
+						.post("http://localhost:1337/removeFromCart", data)
 						.then(function (response) {
 						  console.log(response.data);
 						  printOptions();
@@ -183,7 +186,7 @@ const printOptions = (serverConnection) => {
 					userId: userId,
 				};
 				axios
-				.post("http://localhost:1337/createAccount", data)
+				.post("http://localhost:1337/clearCart", data)
 				.then(function (response) {
 				  console.log(response.data);
 				  printOptions();
@@ -201,7 +204,7 @@ const printOptions = (serverConnection) => {
 					
 				};
 				axios
-				.post("http://localhost:1337/createAccount", data)
+				.post("http://localhost:1337/displayCart", data)
 				.then(function (response) {
 				  console.log(response.data);
 				  printOptions();
@@ -217,7 +220,7 @@ const printOptions = (serverConnection) => {
 					requestType: "MAKE_PURCHASE"
 				};
 				axios
-				.post("http://localhost:1337/createAccount", data)
+				.post("http://localhost:1337/makePurchase", data)
 				.then(function (response) {
 				  console.log(response.data);
 				  printOptions();
@@ -239,7 +242,7 @@ const printOptions = (serverConnection) => {
 								comment: comment
 							};
 							axios
-							.post("http://localhost:1337/createAccount", data)
+							.post("http://localhost:1337/provideFeedback", data)
 							.then(function (response) {
 							  console.log(response.data);
 							  printOptions();
@@ -260,7 +263,7 @@ const printOptions = (serverConnection) => {
 						userId: userId
 					};
 					axios
-					.post("http://localhost:1337/createAccount", data)
+					.post("http://localhost:1337/getSellerRating", data)
 					.then(function (response) {
 					  console.log(response.data);
 					  printOptions();
@@ -277,7 +280,7 @@ const printOptions = (serverConnection) => {
 						userId: userId
 					};
 					axios
-					.post("http://localhost:1337/createAccount", data)
+					.post("http://localhost:1337/getBuyersPurchaseHistory", data)
 					.then(function (response) {
 					  console.log(response.data);
 					  printOptions();

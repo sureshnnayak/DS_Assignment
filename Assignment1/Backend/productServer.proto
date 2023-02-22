@@ -1,0 +1,39 @@
+
+syntax = "proto3";
+
+package prodctdb;
+
+// The greeting service definition.
+service ProductDB {
+  // Sends a greeting
+  rpc getProductOnSale () returns (Status) {}
+  rpc changeSalePrice (productId) returns (Status) {}
+
+  rpc putItemOnSale(itemList) returns (Status) {}
+  rpc removeItemFromSale(itemList) returns (Status) {}
+  rpc addProduct(itemList) returns (Status) {}
+  rpc searchItem(item) returns (Status) {}
+  rpc getProductSeller() returns (Status) {}
+}
+
+message itemList {
+    string data = 1;
+}
+
+message item {
+    string data = 1;
+}
+
+message productId {
+    string data = 1;
+}
+
+// The request message containing the user's name.
+message CustomerDetails {
+  string data = 1;
+}
+
+// The response message containing the greetings
+message Status {
+  string status = 1;
+}
