@@ -3,8 +3,7 @@
 Github Repo: `https://github.com/sureshnnayak/DS_Assignment/tree/main/Assignment1`
 
 This is a template project showing how to implement an ecommerce application with just basic TCP.
-With REST/RPC technology already available why do we want to do this?
-well if you want to understand how REST/RPCs work underneath then this will help you. This project goes over how to use promises to syncronize TCP based message communication. It also shows how to implement your own protocol to create a commonly accepted communication between client and server.
+
 
 It has three main components:
 - Seller (client and server).
