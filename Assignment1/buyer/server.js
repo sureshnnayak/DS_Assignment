@@ -39,7 +39,7 @@ app.post("/createAccount", async (req, res) => {
 
 app.post("/login", async (req, res) => {
     // res.send('Hello World!')
-    user = await getUser(req.body.username);
+    user = await getUser(JSON.stringify(req.body.username));
     if (user != null && user.password == req.body.password) {
         newData = {
             responseType: "SUCCESS",
@@ -56,7 +56,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-    // res.send('Hello World!')
+
     newData = {
         responseType: "SUCCESS",
         message: "Request processed successfully",
@@ -66,9 +66,9 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/searchProducts", async (req, res) => {
-    // res.send('Hello World!')
     console.log("Searching products");
-    products = await searchProducts(req.body);
+    //products = await searchProducts(JSON.stringify(req.body));
+    products = searchProducts(JSON.stringify(req.body));
     newData = {
         responseType: "SUCCESS",
         message: "Request processed successfully",
@@ -90,7 +90,6 @@ app.post("/addToCart", (req, res) => {
 });
 
 app.post("/removeFromCart", (req, res) => {
-    // res.send('Hello World!')
     console.log("Removing from cart");
     console.log(req.body);
     cart = cart.filter((item) => item.userId != req.body.userId);
@@ -101,7 +100,7 @@ app.post("/removeFromCart", (req, res) => {
     res.send(200,newData);
 });
 app.post("/clearCart", (req, res) => {
-    // res.send('Hello World!')
+
     console.log("Clearing cart");
     console.log(req.body);
     cart = cart.filter((item) => item.userId != req.body.userId);
