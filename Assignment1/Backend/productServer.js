@@ -50,9 +50,7 @@ var server  = net.createServer(function(socket) {
                 console.log("Getting product seller");
                 break;
         }
-        socket.write(JSON.stringify(newData));
-
-            
+        socket.write(JSON.stringify(newData));     
     });
 
 

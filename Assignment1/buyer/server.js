@@ -1,3 +1,5 @@
+//Buyer Server  
+
 const { CallTracker } = require('assert');
 var net = require('net');
 
@@ -17,8 +19,8 @@ app.use(bp.urlencoded({ extended: true }))
 const {addUser, getUser, searchProducts, getTransactions, addTransactions, getFeedback, getSellerRating, addFeedback} = require('./backendStub');
 
 
-var newUser = {userId: "suresh", products: ["c1"]}
-var cart = [newUser];
+ var newUser = {userId: "suresh", products: ["c1"]}
+ var cart = [newUser];
 
 
 app.post("/createAccount", async (req, res) => {
@@ -39,7 +41,8 @@ app.post("/createAccount", async (req, res) => {
 
 app.post("/login", async (req, res) => {
     // res.send('Hello World!')
-    user = await getUser(JSON.stringify(req.body.username));
+    //user = await getUser(JSON.stringify(req.body.username));
+    user  = getUser(JSON.stringify(req.body.username));
     if (user != null && user.password == req.body.password) {
         newData = {
             responseType: "SUCCESS",
@@ -74,11 +77,25 @@ app.post("/searchProducts", async (req, res) => {
         message: "Request processed successfully",
         data: products
     };
+    console.log("newData");
     res.send(200,newData);
 });
 
 app.post("/addToCart", (req, res) => {
-    // res.send('Hello World!')
+    console.log("Adding to cart");
+    console.log(req.body);
+    if(cart == null){
+        userCart = {userId: req.data.userId, products: [req.data.itemId]}
+        cart = [userCart];
+        console.log(cart);
+    } else {
+        for(var i = 0; i < cart.length; i++){
+            if(cart[i].userId == req.data.userId){
+                cart[i].products.push(req.data.itemId);
+                userCart = cart[i].products;   
+            }
+        }
+    }
     console.log("Adding to cart");
     console.log(req.body);
     cart.push(req.body);
@@ -142,7 +159,8 @@ app.post("/getFeedback", async (req, res) => {
 
     // res.send('Hello World!')
     console.log("Getting feedback");
-    feedback = await getFeedback(req.body);
+    //feedback = await getFeedback(req.body);
+    feedback =  getFeedback(req.body);
     newData = {
         responseType: "SUCCESS",
         message: "Request processed successfully",
@@ -155,7 +173,8 @@ app.post("/provideFeedback", async (req, res) => {
 
     // res.send('Hello World!')
     console.log("Providing feedback");
-    await addFeedback(req.body);
+    //await addFeedback(req.body);
+    addFeedback(req.body);
     newData = {
         responseType: "SUCCESS",
         message: "Request processed successfully",
@@ -167,7 +186,8 @@ app.get("getTransactions", async (req, res) => {
 
     // res.send('Hello World!')
     console.log("Getting transactions");
-    transactions = await getTransactions(req.body);
+    //transactions = await getTransactions(req.body);
+    transactions = getTransactions(req.body);
     newData = {
 
         responseType: "SUCCESS",
@@ -176,6 +196,36 @@ app.get("getTransactions", async (req, res) => {
     };
     res.send(200,newData);
 });
+
+app.post("/getSellerRating", async (req, res) => {
+
+
+    // res.send('Hello World!')
+    console.log("Getting seller rating");
+    //rating = await getSellerRating(req.body);
+    rating = getSellerRating(req.body);
+    newData = {
+        responseType: "SUCCESS",
+        message: "Request processed successfully",
+        data: rating
+    };
+    res.send(200,newData);
+});
+
+app.post("getBuyersPurchaseHistory", async (req, res) => {
+
+    // res.send('Hello World!')
+    console.log("Getting buyer purchase history");
+    //history = await getBuyersPurchaseHistory(req.body);
+    history = getBuyersPurchaseHistory(req.body);
+    newData = {
+        responseType: "SUCCESS",
+        message: "Request processed successfully",
+        data: history
+    };
+    res.send(200,newData);
+});
+
 
 
 // var server  = net.createServer( function(socket) {
