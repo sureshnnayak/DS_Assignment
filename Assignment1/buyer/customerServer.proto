@@ -1,0 +1,25 @@
+
+syntax = "proto3";
+
+package customerdb;
+
+// The greeting service definition.
+service CustomerDB {
+  // Sends a greeting
+  rpc addCustomer (CustomerDetails) returns (Status) {}
+  rpc loginCustomer (Credentials) returns (Status) {}
+}
+
+message Credentials {
+    string data = 1;
+}
+
+// The request message containing the user's name.
+message CustomerDetails {
+  string data = 1;
+}
+
+// The response message containing the greetings
+message Status {
+  string status = 1;
+}

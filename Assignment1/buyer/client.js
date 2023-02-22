@@ -1,3 +1,5 @@
+
+//Buyer Client
 var net = require('net');
 
 
@@ -88,7 +90,7 @@ const printOptions = (serverConnection) => {
 							password: password
 						};
 						axios
-						.post("http://localhost:1337/createAccount", data)
+						.post("http://localhost:1337/login", data)
 						.then(function (response) {
 						  console.log(response.data);
 						  printOptions();
@@ -105,37 +107,53 @@ const printOptions = (serverConnection) => {
 					requestType: "LOGOUT"
 				};
 				axios
-				.post("http://localhost:1337/createAccount", data)
+				.post("http://localhost:1337/logout", data)
 				.then(function (response) {
 				  console.log(response.data);
 				  printOptions();
 				})
 				.catch(function (error) {
 				  console.log(error);
-				});				break;
+				});				
+				break;
 
 			case "4":
 				console.log("Search items for sale");
 				rl.question("Enter item category: ", (itemCategory) => {
 					rl.question("Enter up to five keywords: ", (keywords) => {
-						const clData = {
+						const data = {
 							itemCategory: itemCategory,
 							keywords: keywords
 						};
-						serverConnection.write(JSON.stringify(getSearchItemsMSG(clData)));
-					});
+						axios
+						.post("http://localhost:1337/searchProducts", data)
+						.then(function (response) {
+						  console.log(response.data);
+						  printOptions();
+						})
+						.catch(function (error) {
+						  console.log(error);
+						});						});
 				});
 				break;
 			case "5":
 				//console.log("Add item to the shopping cart");
 				rl.question("Enter item id: ", (itemId) => {
 					rl.question("Enter quantity: ", (quantity) => {
-						const clData = {
+						const data = {
 							itemId: itemId,
 							userId: "suresh",
 							quantity: quantity
 						};
-						serverConnection.write(JSON.stringify(getAddItemToCartMSG(clData)));
+						axios
+						.post("http://localhost:1337/addToCart", data)
+						.then(function (response) {
+						  console.log(response.data);
+						  printOptions();
+						})
+						.catch(function (error) {
+						  console.log(error);
+						});						
 					});
 				});
 				break;
@@ -144,44 +162,72 @@ const printOptions = (serverConnection) => {
 				console.log("Remove item from the shopping cart");
 				rl.question("Enter item id: ", (itemId) => {
 					rl.question("Enter quantity: ", (quantity) => {
-						const clData = {
+						const data = {
 							itemId: itemId,
 							userId: userId,
 							quantity: quantity
 						};
-						serverConnection.write(JSON.stringify(getRemoveItemFromCartMSG(clData)));
-					});
+						axios
+						.post("http://localhost:1337/removeFromCart", data)
+						.then(function (response) {
+						  console.log(response.data);
+						  printOptions();
+						})
+						.catch(function (error) {
+						  console.log(error);
+						});						});
 				});
 				break;
 
 
 			case "7":{
 				console.log("Clear the shopping cart");
-				const clData = {
+				const data = {
 					userId: userId,
 				};
-				serverConnection.write(JSON.stringify(getClearCartMSG(clData)));
-				break;
+				axios
+				.post("http://localhost:1337/clearCart", data)
+				.then(function (response) {
+				  console.log(response.data);
+				  printOptions();
+				})
+				.catch(function (error) {
+				  console.log(error);
+				});					break;
 			}
 
 			case "8":
 				{
 					console.log("Display shopping cart");
-				const clData = {
+				const data = {
 					userId: "suresh",
 					
 				};
-				serverConnection.write(JSON.stringify(getDisplayCartMSG(clData)));
-				break;
+				axios
+				.post("http://localhost:1337/displayCart", data)
+				.then(function (response) {
+				  console.log(response.data);
+				  printOptions();
+				})
+				.catch(function (error) {
+				  console.log(error);
+				});					break;
 			}
 
 			case "9":{
 				console.log("Make purchase");
-				const clData = {
+				const data = {
 					requestType: "MAKE_PURCHASE"
 				};
-				serverConnection.write(JSON.stringify(getPurchaseCartMSG(clData)));
-				break;
+				axios
+				.post("http://localhost:1337/makePurchase", data)
+				.then(function (response) {
+				  console.log(response.data);
+				  printOptions();
+				})
+				.catch(function (error) {
+				  console.log(error);
+				});					break;
 			}
 			
 			case "10":
@@ -189,14 +235,21 @@ const printOptions = (serverConnection) => {
 				rl.question("Enter item id: ", (itemId) => {
 					rl.question("Enter rating: ", (rating) => {
 						rl.question("Enter comment: ", (comment) => {
-							const clData = {
+							const data = {
 								userId: userId,
 								itemId: itemId,
 								rating: rating,
 								comment: comment
 							};
-							serverConnection.write(JSON.stringify(getProvideFeedbackMSG(clData)));
-						});
+							axios
+							.post("http://localhost:1337/provideFeedback", data)
+							.then(function (response) {
+							  console.log(response.data);
+							  printOptions();
+							})
+							.catch(function (error) {
+							  console.log(error);
+							});							});
 					});
 				});
 				break;
@@ -204,23 +257,37 @@ const printOptions = (serverConnection) => {
 			case "11":
 				console.log("View feedback");
 				rl.question("Enter item id: ", (itemId) => {
-					const clData = {
+					const data = {
 						requestType: "VIEW_FEEDBACK",
 						itemId: itemId,
 						userId: userId
 					};
-					serverConnection.write(JSON.stringify(getViewFeedbackMSG(clData)));
-				});
+					axios
+					.post("http://localhost:1337/getSellerRating", data)
+					.then(function (response) {
+					  console.log(response.data);
+					  printOptions();
+					})
+					.catch(function (error) {
+					  console.log(error);
+					});					});
 				break;
 
 			case "12":
 				console.log("View purchase history");
 				rl.question("Enter user id: ", (userId) => {
-					const clData = {
+					const data = {
 						userId: userId
 					};
-					serverConnection.write(JSON.stringify(getViewPurchaseHistoryMSG(clData)));
-				});
+					axios
+					.post("http://localhost:1337/getBuyersPurchaseHistory", data)
+					.then(function (response) {
+					  console.log(response.data);
+					  printOptions();
+					})
+					.catch(function (error) {
+					  console.log(error);
+					});					});
 				break;
 
 			case "13":
