@@ -7,7 +7,8 @@ var customerDataObject = JSON.parse(customerData);
 function addUser(user) {
   customerDataObject.push(user);
   console.log("User added",user);
-  fs.writeFileSync("../Backend/data/customer_data.json", JSON.stringify(customerDataObject));
+
+  //fs.writeFileSync("../Backend/data/customer_data.json", JSON.stringify(customerDataObject));
 }
 
 function getUser(username) {

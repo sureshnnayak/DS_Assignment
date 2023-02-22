@@ -2,13 +2,12 @@
 
 the performance report for the assignment is as follows:
 
-Buyer/Seller	Avg Responce time	Avg Throughput
-1	            2.78ms	            2907
-10	            14.6ms	            4057
-100	            125.3ms	            6893
+|Buyer/Seller|Avg Response time|Avg Throughput|
 
+|1|                  86ms|         501|
+|10|                242ms|         282|
+|100|              1915ms|           -|
 
-The latency here is higher than expected because the buyer/seller server has to communicate
- with the database server in order to get data and put data. 
- So an additional socket connection has to be made.
-  And also the print statements take a good amount of time to compute and print the result.
+The latency has significantly increased with REST, plus since Node.js is single threaded and uses an event loop for asyncronous execution, all threads are not utilized. 
+The client crashes when testing throughput for 100 users. 
+We can see that the no of ops/second reduce, this is again due to poor multithreading on node.js and overloading of the event loop

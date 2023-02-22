@@ -35,18 +35,21 @@ System Design
 2. Buyer/Seller client-server
 The client to begin with connects to a server, and then gives the user a set of operation options to perform, based on the users choice the client either asks for more information or sends the request to the server. The server opens a TCP connection accepting any clients who want to connect. When a request is received from client, based on the messageId, the request gets routed to the right worker which then requests data from the database server bassed on the data type (Customer data, production data, Transaction Data). This process is synchronized using Promises, the data is received and worked on by the server and it then returns the data as a ResponseMessage to client.
 
+Assignment 2 Update
+1. All the Client server interactions were changed to REST using express.js, gRPC was implemented for backend communication. Rest of the design was same.
+
 
 assumptions:
 1. client always strt the transaction by loggin using username and password.
 
-# Latency  and throughput Details
+# Latency  and throughput Details (with gRPC)
 
-|Buyer/Seller|Avg Responce time|Avg Throughput|
+|Buyer/Seller|Avg Response time|Avg Throughput|
 | --- | --- | --- | 
-|1|2.78ms|2907|
-|10|14.6ms|4057|
-|100|125.3ms|6893|
+|1|86ms|501|
+|10|242ms|282|
+|100|1915ms|-|
 
-
-
-The latency here is higher than expected because the buyer/seller server has to communicate with the database server in order to get data and put data. So an additional socket connection has to be made. And also the print statements take a good amount of time to compute and print the result.
+The latency has significantly increased with REST, plus since Node.js is single threaded and uses an event loop for asyncronous execution, all threads are not utilized. 
+The client crashes when testing throughput for 100 users. 
+We can see that the no of ops/second reduce, this is again due to poor multithreading on node.js and overloading of the event loop

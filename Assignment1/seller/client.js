@@ -1,3 +1,4 @@
+const { time } = require("console");
 var net = require("net");
 const axios = require("axios").default;
 
@@ -28,6 +29,8 @@ const printOptions = () => {
   console.log("5. Put an item for sale");
   console.log("6. Remove an item from sale");
   console.log("7. Display items for sale");
+  console.log("8. Run Average Response Time Test");
+  console.log("9. Run Average Throughput Test");
 
   rl.question("Enter your option: ", (option) => {
     switch (option) {
@@ -45,7 +48,7 @@ const printOptions = () => {
               .post("http://localhost:1338/createAccount", data)
               .then(function (response) {
                 console.log(response.data);
-				printOptions();
+                printOptions();
               })
               .catch(function (error) {
                 console.log(error);
@@ -66,7 +69,7 @@ const printOptions = () => {
               .post("http://localhost:1338/login", data)
               .then(function (response) {
                 console.log(response.data);
-				printOptions();
+                printOptions();
               })
               .catch(function (error) {
                 console.log(error);
@@ -85,7 +88,7 @@ const printOptions = () => {
           .post("http://localhost:1338/logout", data)
           .then(function (response) {
             console.log(response.data);
-			printOptions();
+            printOptions();
           })
           .catch(function (error) {
             console.log(error);
@@ -104,7 +107,7 @@ const printOptions = () => {
             .post("http://localhost:1338/getSellerRating", data)
             .then(function (response) {
               console.log(response.data);
-			  printOptions();
+              printOptions();
             })
             .catch(function (error) {
               console.log(error);
@@ -126,7 +129,7 @@ const printOptions = () => {
                 .post("http://localhost:1338/addItemToSale", data)
                 .then(function (response) {
                   console.log(response.data);
-				  printOptions();
+                  printOptions();
                 })
                 .catch(function (error) {
                   console.log(error);
@@ -146,7 +149,7 @@ const printOptions = () => {
             .post("http://localhost:1338/removeItemFromSale", data)
             .then(function (response) {
               console.log(response.data);
-			  printOptions();
+              printOptions();
             })
             .catch(function (error) {
               console.log(error);
@@ -161,11 +164,67 @@ const printOptions = () => {
             .post("http://localhost:1338/getProductsOnSale", data)
             .then(function (response) {
               console.log(response.data);
-			  printOptions();
+              printOptions();
             })
             .catch(function (error) {
               console.log(error);
             });
+        }
+        break;
+      case "8":
+        {
+          rl.question("Enter item id: ", (noUsers) => {
+            var promisesArray = [];
+            let data = {
+              username: "username",
+              password: "password",
+            };
+            var beforeTime = Date.now();
+            for (i = 0; i < 10*noUsers; i++) {
+              let promise = axios.post(
+                "http://localhost:1338/createAccount",
+                data
+              );
+
+              promisesArray.push(promise);
+            }
+
+            Promise.all(promisesArray).then((values) => {
+              console.log(
+                "All calls finished execution, Time taken ->",
+                Date.now() - beforeTime + "ms"
+              );
+              printOptions();
+            });
+          });
+        }
+        break;
+      case "9":
+        {
+          rl.question("Enter no of users ", (noUsers) => {
+            var promisesArray = [];
+            let data = {
+              username: "username",
+              password: "password",
+            };
+            var beforeTime = Date.now();
+            for (i = 0; i < 1000*noUsers; i++) {
+              let promise = axios.post(
+                "http://localhost:1338/createAccount",
+                data
+              );
+
+              promisesArray.push(promise);
+            }
+
+            Promise.all(promisesArray).then((values) => {
+              console.log(
+                "All calls finished execution, Time taken ->",
+                Date.now() - beforeTime + "ms"
+              );
+              printOptions();
+            });
+          });
         }
         break;
       default:
@@ -173,10 +232,8 @@ const printOptions = () => {
         printOptions();
         break;
     }
-	
   });
 };
-
 
 function sleep(ms) {
   return new Promise((resolve) => {
