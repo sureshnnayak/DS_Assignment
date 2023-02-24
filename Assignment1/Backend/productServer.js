@@ -83,7 +83,7 @@ function main() {
 
     });
     server.bindAsync(
-      "0.0.0.0:50051",
+      "0.0.0.0:50052",
       grpc.ServerCredentials.createInsecure(),
       () => {
         server.start();

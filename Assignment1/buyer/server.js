@@ -29,14 +29,14 @@ app.post("/createAccount", async (req, res) => {
     // req.body.id = req.body.username ;//+ Date.now();
     console.log(req.body);
     //await 
-    addUser(JSON.stringify(req.body));
-    //await addUser(req.body);
+    //addUser(JSON.stringify(req.body));
+    var result  = await addUser(req.body);
     
     newData = {
         responseType: "SUCCESS",
         message: "Request processed successfully",
     };
-    res.send(200,newData);
+    res.send(200,result);
 });
 
 app.post("/login", async (req, res) => {
@@ -70,8 +70,8 @@ app.post("/logout", (req, res) => {
 
 app.post("/searchProducts", async (req, res) => {
     console.log("Searching products");
-    //products = await searchProducts(JSON.stringify(req.body));
-    products = searchProducts(JSON.stringify(req.body));
+    products = await searchProducts(JSON.stringify(req.body));
+    //products = searchProducts(JSON.stringify(req.body));
     newData = {
         responseType: "SUCCESS",
         message: "Request processed successfully",
@@ -116,6 +116,7 @@ app.post("/removeFromCart", (req, res) => {
     };
     res.send(200,newData);
 });
+
 app.post("/clearCart", (req, res) => {
 
     console.log("Clearing cart");
@@ -154,9 +155,7 @@ app.post("/makePurchase", (req, res) => {
     res.send(200,newData);
 });
 
-
 app.post("/getFeedback", async (req, res) => {
-
     // res.send('Hello World!')
     console.log("Getting feedback");
     //feedback = await getFeedback(req.body);
@@ -198,8 +197,6 @@ app.get("getTransactions", async (req, res) => {
 });
 
 app.post("/getSellerRating", async (req, res) => {
-
-
     // res.send('Hello World!')
     console.log("Getting seller rating");
     //rating = await getSellerRating(req.body);
@@ -213,7 +210,6 @@ app.post("/getSellerRating", async (req, res) => {
 });
 
 app.post("getBuyersPurchaseHistory", async (req, res) => {
-
     // res.send('Hello World!')
     console.log("Getting buyer purchase history");
     //history = await getBuyersPurchaseHistory(req.body);
