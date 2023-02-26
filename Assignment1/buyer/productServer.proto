@@ -14,6 +14,10 @@ service ProductDB {
   rpc addProduct(itemList) returns (Status) {}
   rpc searchItem(item) returns (Status) {}
   rpc getProductSeller(itemList) returns (Status) {}
+  rpc addFeedback(feedback) returns (Status){}
+}
+message feedback {
+  string data = 1;
 }
 
 message productName {

@@ -17,6 +17,7 @@ app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
 const {addUser, getUser, searchProducts, getTransactions, addTransactions, getFeedback, getSellerRating, addFeedback} = require('./backendStub');
+const { response } = require('express');
  var cart = null;
 
 
@@ -170,16 +171,32 @@ app.post("/displayCart", (req, res) => {
 });
 
 app.post("/makePurchase", (req, res) => {
-    // res.send('Hello World!')
     console.log("Making purchase");
     console.log(req.body);
-    cart = cart.filter((item) => item.userId != req.body.userId);
-    newData = {
-        responseType: "SUCCESS",
-        message: "Request processed successfully",
-    };
+    
+    for(var i = 0; i < cart.length; i++){
+        if (cart[i].userId == req.body.userId){
+            // send request for make purchase
+            responce = "SUCESS";
+            if (response == "SUCESS"){
+                cart[i].products = []
+                newData = {
+                    responseType: "SUCCESS",
+                    message: "Request processed successfully",
+                };
+
+            }
+            else {
+                newData = {
+                    responseType: "FAILURE",
+                    message: "Payment declined",
+            }
+        }
+    }
     res.send(200,newData);
+    }
 });
+
 
 app.post("/getFeedback", async (req, res) => {
     // res.send('Hello World!')
@@ -194,12 +211,13 @@ app.post("/getFeedback", async (req, res) => {
     res.send(200,newData);
 });
 
+
 app.post("/provideFeedback", async (req, res) => {
 
     // res.send('Hello World!')
     console.log("Providing feedback");
-    //await addFeedback(req.body);
-    addFeedback(req.body);
+    await addFeedback(req.body);
+    //addFeedback(req.body);
     newData = {
         responseType: "SUCCESS",
         message: "Request processed successfully",
