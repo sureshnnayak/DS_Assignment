@@ -252,7 +252,8 @@ const printOptions = (serverConnection) => {
 							})
 							.catch(function (error) {
 							  console.log(error);
-							});							});
+							});							
+						});
 					});
 				});
 				break;

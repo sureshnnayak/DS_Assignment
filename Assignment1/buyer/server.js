@@ -40,9 +40,9 @@ app.post("/createAccount", async (req, res) => {
 app.post("/login", async (req, res) => {
     // res.send('Hello World!')
     //user = await getUser(JSON.stringify(req.body.username));
-    status  =  await getUser(req.body);
-    console.log(status)
-    if (status.responseType == "SUCCESS") {
+    resp =  await getUser(req.body);
+    console.log(resp)
+    if (resp.responseType == "SUCCESS") {
 
         userCart = {
             userId: req.body.username,
@@ -57,7 +57,7 @@ app.post("/login", async (req, res) => {
         }
     }
     console.log(cart);
-    res.send(200,status);
+    res.send(200,resp);
     
 });
 
@@ -76,15 +76,9 @@ app.post("/logout", (req, res) => {
 
 app.post("/searchProducts", async (req, res) => {
     console.log("Searching products");
-    products = await searchProducts(JSON.stringify(req.body));
-    //products = searchProducts(JSON.stringify(req.body));
-    newData = {
-        responseType: "SUCCESS",
-        message: "Request processed successfully",
-        data: products
-    };
-    console.log("newData");
-    res.send(200,newData);
+    resp = await searchProducts(JSON.stringify(req.body));
+    console.log(resp);
+    res.send(200,resp);
 });
 
 app.post("/addToCart", (req, res) => {
@@ -123,23 +117,86 @@ app.post("/addToCart", (req, res) => {
 
 app.post("/removeFromCart", (req, res) => {
     console.log("Removing from cart");
+    newData = null;
     console.log(req.body);
-    cart = cart.filter((item) => item.userId != req.body.userId);
-    newData = {
-        responseType: "SUCCESS",
-        message: "Request processed successfully",
-    };
+    if(cart == null){
+        newdata = {
+            responseType: "FAILURE",
+            message: "Login before modifying the cart",
+        }
+        console.log("user not found\n")
+    } else {
+        userCart = null
+        for(var i = 0; i < cart.length; i++){
+            if(cart[i].userId == req.body.userId){
+                //cart = cart.filter((item) => item.userId != req.body.userId);
+                cart[i].products = cart[i].products.filter((item) => item != req.body.itemId);
+
+                //cart[i].products.push(req.body.itemId);
+                userCart = cart[i].products;
+                newData = {
+                    responseType: "SUCCESS",
+                    message: "Request processed successfully",
+                    cart : userCart
+                };
+
+            }
+        }
+        if (newData == null)
+        {
+            newdata = {
+                responseType: "FAILURE",
+                message: "Login before adding items to cart",
+            }
+        }
+    }  
     res.send(200,newData);
 });
 
 app.post("/clearCart", (req, res) => {
     console.log("Clearing cart");
     console.log(req.body);
-    cart = cart.filter((item) => item.userId != req.body.userId);
-    newData = {
-        responseType: "SUCCESS",
-        message: "Request processed successfully",
-    };
+    newData = null;
+    console.log(req.body);
+    if(cart == null){
+        newdata = {
+            responseType: "FAILURE",
+            message: "Login before modifying the cart",
+        }
+        console.log("user not found\n")
+    } else {
+        userCart = null
+        for(var i = 0; i < cart.length; i++){
+            if(cart[i].userId == req.body.userId){
+                //cart = cart.filter((item) => item.userId != req.body.userId);
+                cart[i].products = [];
+
+                //cart[i].products.push(req.body.itemId);
+                userCart = cart[i].products;
+                newData = {
+                    responseType: "SUCCESS",
+                    message: "Request processed successfully",
+                    cart : userCart
+                };
+
+            }
+        }
+        if (newData == null)
+        {
+            newdata = {
+                responseType: "FAILURE",
+                message: "Login before adding items to cart",
+            }
+        }
+    }  
+
+
+
+    // cart = cart.filter((item) => item.userId != req.body.userId);
+    // newData = {
+    //     responseType: "SUCCESS",
+    //     message: "Request processed successfully",
+    // };
     res.send(200,newData);
 });
 
@@ -148,11 +205,16 @@ app.post("/displayCart", (req, res) => {
     userCart = null
     console.log("Getting cart");
     console.log(req.body);
-    for(var i = 0; i < cart.length; i++){
-        if (cart[i].userId == req.body.userId){
-            userCart = cart[i]
+    console.log(cart)
+    if (cart != null){
+        for(var i = 0; i < cart.length; i++){
+            if (cart[i].userId == req.body.userId){
+                userCart = cart[i]
+            }
         }
     }
+
+    
     if( userCart == null){
         newData = {
             responseType: "FAILURE",
@@ -265,177 +327,6 @@ app.post("getBuyersPurchaseHistory", async (req, res) => {
     };
     res.send(200,newData);
 });
-
-
-
-// var server  = net.createServer( function(socket) {
-// 	socket.on('data', async function(data) {
-// 		const req = JSON.parse(data);
-
-// 		console.log(req);
-// 		switch(req.requestType){
-
-//             case "CREATE_ACCOUNT":
-//                 addUser(data);
-//                 console.log("Creating account");
-// 				//customerDB.addUser(req.data)
-// 				newData = { "responseType": "SUCCESS",
-// 				"message": "Request processed successfully"};
-//                 break;
-
-//             case "LOGIN":
-//                 user = await getUser(data);
-//                 console.log(user,"logged in");
-                
-
-// 				if (user != null && user.password == req.data.password) {
-//                     newUser = {userId: req.data.userId, products: [req.data.itemId]}
-//                     if(cart == null){
-//                         cart = [newUser];
-//                     } else {cart.push(newUser);
-//                     }
-// 					newData = { "responseType": "SUCCESS",
-// 					"message": "Request processed successfully"};
-// 				} else {
-// 					newData = { "responseType": "FAILURE",
-// 					"message": "Invalid username or password"};
-// 				}
-//                 break;
-
-//             case "LOGOUT":
-//                 console.log("Logging out");
-//                 break;
-
-//             case "SEARCH_ITEMS":
-//                 products = await searchProducts(data);
-//                 //products = productDB.searchProducts(req.data.keywords);
-//                 newData = { "responseType": "SUCCESS",
-//                 data : products};
-//                 console.log("Item founnd");
-//                 console.log(products);
-//                 break;
-
-//             case "ADD_ITEM_TO_CART":
-//                 if(cart == null){
-//                     userCart = {userId: req.data.userId, products: [req.data.itemId]}
-//                     cart = [userCart];
-//                     console.log(cart);
-//                 } else {
-//                     for(var i = 0; i < cart.length; i++){
-//                         if(cart[i].userId == req.data.userId){
-//                             cart[i].products.push(req.data.itemId);
-//                             userCart = cart[i].products;   
-//                         }
-//                     }
-//                 }
-//                 newData = { "responseType": "SUCCESS",
-//                             data: userCart  };
-//                 break;
-
-//             case "REMOVE_ITEM_FROM_CART":
-//                 console.log(req.data.userId);
-//                 for(var i = 0; i < cart.length; i++){
-//                     if(cart[i].userId == req.data.userId && cart[i].products.includes(req.data.itemId)){
-                        
-//                         for (var j in cart[i].products){
-//                             if(cart[i].products[j] == req.data.itemId){
-//                                 console.log("Removing item from cart");
-//                                 cart[i].products.splice(j,1);
-//                             }
-                        
-//                         }
-//                         console.log(cart[i].products);
-//                     }
-//                 }
-//                 //console.log("Removing item from cart");
-//                 break;
-
-//             case "CLEAR_CART":
-//                 for(var i = 0; i < cart.length; i++){
-//                     if(cart[i].userId == req.data.userId){
-//                         cart[i].products = null;
-//                     }
-//                 }
-//                 console.log("Clearing cart");
-//                 break;
-
-//             case "DISPLAY_CART":
-//                 console.log("Viewing cart");
-//                 for(var i = 0; i < cart.length; i++){
-//                     if(cart[i].userId == req.data.userId){
-//                         newData = { "responseType": "SUCCESS",
-//                         data : cart[i].products};
-//                     }
-//                 }
-//                 console.log(newData);
-//                 break;
-
-//             case "MAKE_PURCHASE":
-
-//                 for(var i = 0; i < cart.length; i++){
-//                     if(cart[i].userId == req.data.userId){
-//                         await  addTransactions(cart[i].products, cart[i].userId);
-//                         //transactionDB.addTransactions(cart[i].products, cart[i].userId);
-//                         cart[i].products = null;
-//                     }
-//                 }
-//                 newData = { "responseType": "SUCCESS",
-//                 "message": "Request processed successful`ly"  };
-//                 console.log("Making purchase");
-//                 break;
-
-//             case "PROVIDE_FEEDBACK":
-//                 await addFeedback(data)
-//                 //transactionDB.addFeedback(req.data.transactionId, req.data.feedback);
-//                 newData = 
-//                     { "responseType": "SUCCESS",
-//                     "message": "Request processed successfully"  };
-//                 console.log("Providing feedback");
-//                 break;
-
-//             case "VIEW_FEEDBACK":
-//                 feedback = await getFeedback(data);
-//                 newData = 
-//                     { 
-//                         "responseType": "SUCCESS",
-//                         data : feedback};
-//                 console.log("Viewing feedback");
-//                 break;
-
-//             case "VIEW_PURCHASE_HISTORY":
-
-//                 transactions = await getTransactions(data);
-//                 newData = { "responseType": "SUCCESS",
-//                 data : transactions};
-//                 console.log("Viewing purchase history");
-//                 break;
-//         }
-//         socket.write(JSON.stringify(newData));
-// 	});
-
-// 	socket.on('close', function(data) {
-// 		console.log('Connection closed');
-// 	});
-
-// 	socket.on('error', function (error) {
-// 		console.error(JSON.stringify(error));
-// 	});
-// });
-
-
-
-// server.listen(1337, function(){
-
-// 	console.log('Buyer Server listening on port 1337');
-
-// 	server.	on('error', function (error) {
-// 		console.error(JSON.stringify(error));
-// 	});
-// 	server.on('close', function (error) {
-// 		console.error(JSON.stringify(error));
-// 	});
-
-// });
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

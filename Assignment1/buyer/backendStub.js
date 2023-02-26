@@ -45,7 +45,6 @@ var packageDefinitionProduct = protoLoader.loadSync(PROTO_PATH_PRODUCT, {
 /*
 STUB FUNCTIONS
 */
-
 const  addUser = async(data) => {
     console.log("addUser  backendStub");
     return new Promise((resolve, reject) => {
@@ -144,9 +143,6 @@ function getFeedback(data){
     });
 }
 
-// const productDbServerServer = getProductDbConnection();
-// const customerDbServerServer = getCustomerDbConnection();
-// const transactionDbServerServer = getTransactionDbConnection();
 
 
 module.exports = { addUser, getUser, searchProducts, getTransactions, addTransactions, getFeedback, getSellerRating, addFeedback };
