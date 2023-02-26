@@ -149,13 +149,6 @@ function getUser(data){
               resolve(JSON.parse(response.status))
             }
           );
-          
-        // customerDbServerServer.write(data);
-        // customerDbServerServer.on('data',  function (response) {
-        
-        //     res = JSON.parse(response);
-        //     resolve(res);
- 
     });
 }
 

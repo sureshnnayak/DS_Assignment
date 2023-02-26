@@ -132,7 +132,6 @@ app.post("/removeFromCart", (req, res) => {
 });
 
 app.post("/clearCart", (req, res) => {
-
     console.log("Clearing cart");
     console.log(req.body);
     cart = cart.filter((item) => item.userId != req.body.userId);
@@ -145,15 +144,28 @@ app.post("/clearCart", (req, res) => {
 
 app.post("/displayCart", (req, res) => {
     // res.send('Hello World!')
+    userCart = null
     console.log("Getting cart");
     console.log(req.body);
-    cartItems = cart.filter((item) => item.userId == req.body.userId);
-    newData = {
-        responseType: "SUCCESS",
-        message: "Request processed successfully",
-        data: cartItems
-    };
-
+    for(var i = 0; i < cart.length; i++){
+        if (cart[i].userId == req.body.userId){
+            userCart = cart[i]
+        }
+    }
+    if( userCart == null){
+        newData = {
+            responseType: "FAILURE",
+            message: "PLease login to access the cart"
+        };
+    }
+    else {
+        newData = {
+            responseType: "SUCCESS",
+            message: "Request processed successfully",
+            cart: userCart.products,
+        
+        };
+    }
     res.send(200,newData);
 });
 

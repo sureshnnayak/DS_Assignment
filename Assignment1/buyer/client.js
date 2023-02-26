@@ -116,7 +116,8 @@ const printOptions = (serverConnection) => {
 				})
 				.catch(function (error) {
 				  console.log(error);
-				});				
+				});	
+				userId = null;			
 				break;
 
 			case "4":
@@ -202,7 +203,7 @@ const printOptions = (serverConnection) => {
 				{
 					console.log("Display shopping cart");
 				const data = {
-					userId: "suresh",
+					userId: userId,
 					
 				};
 				axios
