@@ -17,10 +17,7 @@ app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
 const {addUser, getUser, searchProducts, getTransactions, addTransactions, getFeedback, getSellerRating, addFeedback} = require('./backendStub');
-
-
- var newUser = {userId: "suresh", products: ["c1"]}
- var cart = [newUser];
+ var cart = null;
 
 
 app.post("/createAccount", async (req, res) => {
@@ -42,24 +39,32 @@ app.post("/createAccount", async (req, res) => {
 app.post("/login", async (req, res) => {
     // res.send('Hello World!')
     //user = await getUser(JSON.stringify(req.body.username));
-    user  = getUser(JSON.stringify(req.body.username));
-    if (user != null && user.password == req.body.password) {
-        newData = {
-            responseType: "SUCCESS",
-            message: "Request processed successfully",
-        };
-    } else {
-        newData = {
-            responseType: "FAILURE",
-            message: "Invalid username or password",
-        };
+    status  =  await getUser(req.body);
+    console.log(status)
+    if (status.responseType == "SUCCESS") {
+
+        userCart = {
+            userId: req.body.username,
+            products: []
+        }
+        if (cart == null){
+            cart = [userCart]
+        }
+        else {
+            cart.push(userCart)
+
+        }
     }
-    res.send(200,newData);
-    console.log("Logging in");
+    console.log(cart);
+    res.send(200,status);
+    
 });
 
 app.post("/logout", (req, res) => {
 
+    if (cart != null){
+        cart = cart.filter((item) => item.userId != req.body.userId);
+    }
     newData = {
         responseType: "SUCCESS",
         message: "Request processed successfully",
@@ -83,26 +88,35 @@ app.post("/searchProducts", async (req, res) => {
 
 app.post("/addToCart", (req, res) => {
     console.log("Adding to cart");
-    console.log(req.body);
+    newData = null
     if(cart == null){
-        userCart = {userId: req.data.userId, products: [req.data.itemId]}
-        cart = [userCart];
-        console.log(cart);
+        newdata = {
+            responseType: "FAILURE",
+            message: "Login before adding items to cart",
+        }
+        console.log("user not found\n")
     } else {
+        userCart = null
         for(var i = 0; i < cart.length; i++){
-            if(cart[i].userId == req.data.userId){
-                cart[i].products.push(req.data.itemId);
-                userCart = cart[i].products;   
+            if(cart[i].userId == req.body.userId){
+                cart[i].products.push(req.body.itemId);
+                userCart = cart[i].products;
+                newData = {
+                    responseType: "SUCCESS",
+                    message: "Request processed successfully",
+                    cart : userCart
+                };
+
             }
         }
-    }
-    console.log("Adding to cart");
-    console.log(req.body);
-    cart.push(req.body);
-    newData = {
-        responseType: "SUCCESS",
-        message: "Request processed successfully",
-    };
+        if (newData == null)
+        {
+            newdata = {
+                responseType: "FAILURE",
+                message: "Login before adding items to cart",
+            }
+        }
+    }  
     res.send(200,newData);
 });
 

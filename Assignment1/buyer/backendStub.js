@@ -139,25 +139,23 @@ const  addUser = async(data) => {
     });
 }
 
-
-// const  addUser = async(data) => {
-//     return new Promise((resolve, reject) => {
-//         customerDbServerServer.write(data);
-//         customerDbServerServer.on('data',  function (response) {
-// 			res = JSON.parse(response);
-// 			resolve(res);
-//         });
-//     });
-// }
-
 function getUser(data){
+    console.log("getUser  backendStub");
     return new Promise((resolve, reject) => {
-        customerDbServerServer.write(data);
-        customerDbServerServer.on('data',  function (response) {
+        clientCustomer.loginCustomer(
+            { data: JSON.stringify(data) },
+            function (err, response) {
+              console.log("status:", JSON.parse(response.status));
+              resolve(JSON.parse(response.status))
+            }
+          );
+          
+        // customerDbServerServer.write(data);
+        // customerDbServerServer.on('data',  function (response) {
         
-            res = JSON.parse(response);
-            resolve(res);
-        });
+        //     res = JSON.parse(response);
+        //     resolve(res);
+ 
     });
 }
 

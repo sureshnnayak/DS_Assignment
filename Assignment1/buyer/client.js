@@ -28,7 +28,8 @@ Get seller rating: provide seller id
 Get buyer purchase history 
 */
 
-const {    createAcccountMSG,
+const {    
+	createAcccountMSG,
     getLoginMSG,
     getLogoutMSG,
     getSearchItemsMSG,
@@ -97,7 +98,8 @@ const printOptions = (serverConnection) => {
 						})
 						.catch(function (error) {
 						  console.log(error);
-						});					});
+						});					
+					});
 				});
 				break;
 
