@@ -1,0 +1,28 @@
+
+syntax = "proto3";
+
+package transactiondb;
+
+// The greeting service definition.
+service TransactionDB {
+  // Sends a greeting
+  rpc getSellerRating (SellerId) returns (Response) {}
+  rpc addTransaction (ReqData) returns (Response) {}
+  rpc getFeedback (ReqData) returns (Response) {}
+  rpc addFeedback (ReqData) returns (Response) {}
+  rpc getBuyersPurchaseHistory (ReqData) returns (Response) {}
+}
+
+message ReqData {
+    string data = 1;
+}
+
+// // The request message containing the user's name.
+message SellerId {
+  string data = 1;
+}
+
+// // The response message containing the greetings
+message Response {
+  string res = 1;
+}

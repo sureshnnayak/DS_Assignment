@@ -1,9 +1,16 @@
 [
     {
         "transactionId": "1",
-        "seller": "suresh",
+        "sellerId": "suresh",
         "buyer": "CREDIT",
         "rating": "1000",
+        "ptoduct" : "product1"
+    },
+    {
+        "transactionId": "2",
+        "sellerId": "nayak",
+        "buyer": "CREDIT",
+        "rating": "1500",
         "ptoduct" : "product1"
     }
 ]

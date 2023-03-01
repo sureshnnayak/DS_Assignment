@@ -18,6 +18,7 @@ function getBuyersPurchaseHistory(buyerId){
 }
 
 function getSellerRating(sellerId){
+    console.log("SellerID is ,",sellerId);
     var sellerRating = 0;
     var sellerRatingCount = 0;
     for (var i = 0; i < transactionsDataObject.length; i++){
