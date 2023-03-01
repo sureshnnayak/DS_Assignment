@@ -44,5 +44,3 @@ message CustomerDetails {
 message Status {
   string status = 1;
 }
-
-message Empty {}

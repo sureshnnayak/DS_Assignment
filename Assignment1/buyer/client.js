@@ -228,7 +228,7 @@ const printOptions = (serverConnection) => {
 			case "9":{
 				console.log("Make purchase");
 				const data = {
-					requestType: "MAKE_PURCHASE"
+					userId: userId
 				};
 				axios
 				.post("http://localhost:1337/makePurchase", data)

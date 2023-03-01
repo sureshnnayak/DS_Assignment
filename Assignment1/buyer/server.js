@@ -11,7 +11,6 @@ const bp = require("body-parser");
 
 const port = 1337;
 
-var url = "http://localhost:8000/wsdl?wsdl";
 
 process.chdir(__dirname);
 console.log(process.cwd());
@@ -29,6 +28,7 @@ const {
   getFeedback,
   getSellerRating,
   addFeedback,
+  soapCall,
 } = require("./backendStub");
 const { response } = require("express");
 var cart = null;
@@ -88,7 +88,7 @@ app.post("/logout", (req, res) => {
 app.post("/searchProducts", async (req, res) => {
   console.log("Searching products");
   resp = await searchProducts(JSON.stringify(req.body));
-  console.log(resp);
+  console.log(resp.data);
   res.send(200, resp);
 });
 
@@ -234,48 +234,44 @@ app.post("/displayCart", (req, res) => {
   res.send(200, newData);
 });
 
-app.post("/makePurchase", (req, res) => {
+app.post("/makePurchase", async (req, res) => {
   console.log("Making purchase");
   console.log(req.body);
-
   // Create client
-  soap.createClient(url, function (err, client) {
-    if (err) {
-      throw err;
-    }
-   
-    var args = {
-      cardnumber: "2222123343211234",
-      securitycode: "555",
+  var newData = null;
+  if (cart == null) {
+    newdata = {
+      responseType: "FAILURE",
+      message: "Login before adding items to cart",
     };
-    // call the service
-    client.FinTransactions(args, function (err, res) {
-      if (err) throw err;
-      // print the service returned result
-      console.log(res);
-    });
-  });
+    console.log("user not found\n");
+  } else {
+    for (var i = 0; i < cart.length; i++) {
+      if (cart[i].userId == req.body.userId) {
+        var respBank = await soapCall("data")
+        console.log(respBank);
 
-  for (var i = 0; i < cart.length; i++) {
-    if (cart[i].userId == req.body.userId) {
-      // send request for make purchase
-      responce = "SUCESS";
-      if (response == "SUCESS") {
-        cart[i].products = [];
-        newData = {
-          responseType: "SUCCESS",
-          message: "Request processed successfully",
-        };
-      } else {
-        newData = {
-          responseType: "FAILURE",
-          message: "Payment declined",
-        };
+        if (respBank.result == "SUCCESS") {
+          cart[i].products = [];
+          newData = {
+            responseType: "SUCCESS",
+            message: "Request processed successfully",
+          };
+        } else {
+          newData = {
+            responseType: "FAILURE",
+            message: "Payment declined",
+          };
+        }
       }
+      res.send(200, newData);
     }
-    res.send(200, newData);
   }
 });
+
+async function soap_request(obj){
+
+}
 
 app.post("/getFeedback", async (req, res) => {
   // res.send('Hello World!')

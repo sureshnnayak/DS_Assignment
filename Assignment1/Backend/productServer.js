@@ -59,7 +59,7 @@ function addProduct(call, callback) {
 }
 
 function searchItem(call, callback) {
-    products = productDB.searchProducts(call.request.keywords);
+    products = productDB.searchProducts(JSON.parse(call.request.data).keywords);
     newData = { "responseType": "SUCCESS",
     data : products};
     console.log("Searching products");
