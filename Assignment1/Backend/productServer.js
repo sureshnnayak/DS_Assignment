@@ -62,6 +62,7 @@ function searchItem(call, callback) {
     console.log("Searching products");
     callback(null, { status: JSON.stringify(newData) });
 }
+
 function getProductSeller(call, callback) {
     seller = productDB.getProductSeller(call.request.itemId);
     newData = { "responseType": "SUCCESS",

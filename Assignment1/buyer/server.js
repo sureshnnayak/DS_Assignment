@@ -5,9 +5,13 @@ var net = require("net");
 
 const process = require("process");
 const express = require("express");
+var soap = require("soap");
+
 const bp = require("body-parser");
 
 const port = 1337;
+
+var url = "http://localhost:8000/wsdl?wsdl";
 
 process.chdir(__dirname);
 console.log(process.cwd());
@@ -39,6 +43,7 @@ app.post("/createAccount", async (req, res) => {
 
   req.body.id = req.body.username + Date.now();
   req.body.itemsBought = 0;
+  req.body.loginSessions = 0;
   var result = await addUser(req.body);
 
   newData = {
@@ -232,6 +237,24 @@ app.post("/displayCart", (req, res) => {
 app.post("/makePurchase", (req, res) => {
   console.log("Making purchase");
   console.log(req.body);
+
+  // Create client
+  soap.createClient(url, function (err, client) {
+    if (err) {
+      throw err;
+    }
+   
+    var args = {
+      cardnumber: "2222123343211234",
+      securitycode: "555",
+    };
+    // call the service
+    client.FinTransactions(args, function (err, res) {
+      if (err) throw err;
+      // print the service returned result
+      console.log(res);
+    });
+  });
 
   for (var i = 0; i < cart.length; i++) {
     if (cart[i].userId == req.body.userId) {

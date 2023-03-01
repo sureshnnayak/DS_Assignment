@@ -64,20 +64,28 @@ const printOptions = (serverConnection) => {
 				console.log("Create an account");
 				rl.question("Enter username: ", (username) => {
 					rl.question("Enter password: ", (password) => {
-						const data = {
-							username: username,
-							password: password,
-							//category: "buyer"
-						};
-						axios
-						.post("http://localhost:1337/createAccount", data)
-						.then(function (response) {
-						  console.log(response.data);
-						  printOptions();
+						rl.question("Enter Card No: ", (cardNo) => {
+							rl.question("Enter Security pin: ", (secPin) => {
+								const data = {
+									username: username,
+									password: password,
+									cardNo: cardNo,
+									secPin:secPin,
+									category: "buyer"
+								};
+								axios
+								.post("http://localhost:1337/createAccount", data)
+								.then(function (response) {
+								  console.log(response.data);
+								  printOptions();
+								})
+								.catch(function (error) {
+								  console.log(error);
+								});
+							})
 						})
-						.catch(function (error) {
-						  console.log(error);
-						});
+							
+				
 					});
 				});
 				break;
@@ -298,7 +306,7 @@ const printOptions = (serverConnection) => {
 
 			default:
 				console.log("Exiting...");
-				serverConnection.destroy();
+				// serverConnection.destroy();
 				//break;
 				return;
 
@@ -331,30 +339,30 @@ function handleResponce(res, buyerServer){
 
 
 
-function getConnection(){
+// function getConnection(){
 
-	var buyerServer = new net.Socket();
-	buyerServer.connect(1337, 'localhost', function() {
-		console.log('Connected');
-		//buyerServer.write(JSON.stringify(clData));
-	});
+// 	var buyerServer = new net.Socket();
+// 	buyerServer.connect(1337, 'localhost', function() {
+// 		console.log('Connected');
+// 		//buyerServer.write(JSON.stringify(clData));
+// 	});
 
-	buyerServer.on('data', function(data) {
-		console.log('Received: ' + data);
-		res = JSON.parse(data);
-		handleResponce(res,buyerServer);
-		//buyerServer.destroy(); // kill buyerServer after buyerServer's response
-	});
+// 	buyerServer.on('data', function(data) {
+// 		console.log('Received: ' + data);
+// 		res = JSON.parse(data);
+// 		handleResponce(res,buyerServer);
+// 		//buyerServer.destroy(); // kill buyerServer after buyerServer's response
+// 	});
 
-	buyerServer.on('close', function() {
-		console.log('Connection closed');
-	});
+// 	buyerServer.on('close', function() {
+// 		console.log('Connection closed');
+// 	});
 
-	buyerServer.on('error', function (error) {
-		console.error(JSON.stringify(error));
-	});
-	return buyerServer;
-}
+// 	buyerServer.on('error', function (error) {
+// 		console.error(JSON.stringify(error));
+// 	});
+// 	return buyerServer;
+// }
 
 
 function sleep(ms) {
@@ -366,8 +374,8 @@ function sleep(ms) {
 const start = async () => {
 	console.log("Welcome to the shopping system");
 	//await sleep(2000);	
-	const buyerServer = getConnection();
-	printOptions(buyerServer);
+	// const buyerServer = getConnection();
+	printOptions();
 	
 }
 

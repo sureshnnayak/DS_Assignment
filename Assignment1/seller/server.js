@@ -65,7 +65,8 @@ app.post("/createAccount", (req, res) => {
   req.body.feedbackNeg = 0;
   req.body.feedbackPos = 0;
   req.body.itemsSold = 0;
-
+  req.body.loginSessions = 0;
+  
   clientCustomer.addCustomer(
     { data: JSON.stringify(req.body) },
     function (err, response) {
