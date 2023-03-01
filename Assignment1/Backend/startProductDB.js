@@ -8,7 +8,6 @@ var productDataObject = JSON.parse(productData);
 
 
 
-
 function updateProductQuantity(productId, quantity){
     for (var i = 0; i < productDataObject.length; i++){
         if (productDataObject[i].itemId == productId){
@@ -37,6 +36,14 @@ function changeSalePrice(productId, salePrice){
     });
 }
 
+function addFeedback(data){
+    console.log("ADDING FEEDBACK in  startproductDb")
+    for (var i = 0; i < productDataObject.length; i++){
+        if (productDataObject[i].itemId == data.itemId){
+            productDataObject[i].feedback = feedback;
+        }
+    }
+}
 function getProductOnSale(keywords){
     var productsOnSale = [];
     for (var i = 0; i < productDataObject.length; i++){
@@ -101,6 +108,7 @@ module.exports = {  updateProductQuantity,
      putItemOnSale, 
      removeItemFromSale,
      searchProducts,
-     getProductSeller
+     getProductSeller,
+     addFeedback,
     };
   

@@ -12,9 +12,13 @@ function addUser(user) {
 }
 
 function getUser(username) {
+    console.log(username)
     for (var i = 0; i < customerDataObject.length; i++) {
+        console.log(customerDataObject[i].username)
         if (customerDataObject[i].username == username) {
+            console.log(customerDataObject[i])
             return customerDataObject[i];
+            
         }
     }
     return null;

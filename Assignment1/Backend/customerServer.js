@@ -11,7 +11,7 @@ var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   oneofs: true,
 });
 var custdb = grpc.loadPackageDefinition(packageDefinition).customerdb;
-
+7;
 const process = require("process");
 process.chdir(__dirname);
 console.log(process.cwd());
@@ -31,7 +31,10 @@ function addCustomer(call, callback) {
 // ------------------loginCustomer---------------------grpc----------------
 function loginCustomer(call, callback) {
   reqdata = JSON.parse(call.request.data);
+  console.log("request for customer login for :", reqdata)
+
   user = customerDB.getUser(reqdata.username);
+  console.log("obtained from DB:", user)
   if (user != null && user.password == reqdata.password) {
     newData = {
       responseType: "SUCCESS",
