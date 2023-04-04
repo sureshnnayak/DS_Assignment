@@ -18,7 +18,7 @@ const {
   getRemoveItemFromSaleMSG,
   displayItemsForSaleMSG,
   getDisplayItemsForSaleMSG,
-} = require("./messages");
+} = require("../seller/messages");
 
 const printOptions = () => {
   console.log("Please select an option:");

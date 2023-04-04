@@ -1,5 +1,5 @@
 // gRPC setup
-var PROTO_PATH = "./productServer.proto";
+var PROTO_PATH = "../ConfigsAndDB/gRPC/productServer.proto";
 var grpc = require("@grpc/grpc-js");
 var protoLoader = require("@grpc/proto-loader");
 var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
@@ -13,7 +13,7 @@ var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 var productdb = grpc.loadPackageDefinition(packageDefinition).productdb;
 
 
-var productDB = require("../Backend/startProductDB");
+var productDB = require("./productDBStub");
 // ------------- END----------------
 function getProductsOnSale(call, callback) {
     products = productDB.getProductsOnSale();

@@ -1,9 +1,9 @@
 
 // Requiring fs module
 const fs = require("fs");
- const { getProductSeller } = require("../Backend/startProductDB");
+ const { getProductSeller } = require("./productDBStub");
 
-var transactionsData = fs.readFileSync("../Backend/data/transactions.json");
+var transactionsData = fs.readFileSync("../ConfigsAndDB/databases/transactions.json");
 var transactionsDataObject = JSON.parse(transactionsData);
 
          

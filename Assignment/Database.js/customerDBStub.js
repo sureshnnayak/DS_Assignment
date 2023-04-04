@@ -1,14 +1,14 @@
 // Requiring fs module
 const fs = require("fs");
 
-var customerData = fs.readFileSync("../Backend/data/customer_data.json");
+var customerData = fs.readFileSync("../ConfigsAndDB/databases/customer_data.json");
 var customerDataObject = JSON.parse(customerData);
 
 function addUser(user) {
   customerDataObject.push(user);
   console.log("User added", user);
 
-  fs.writeFileSync("../Backend/data/customer_data.json", JSON.stringify(customerDataObject));
+  fs.writeFileSync("../ConfigsAndDB/databases/customer_data.json", JSON.stringify(customerDataObject));
 }
 
 function getUser(username) {

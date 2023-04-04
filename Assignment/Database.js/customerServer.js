@@ -1,6 +1,6 @@
 
 // gRPC setup
-var PROTO_PATH = "./customerServer.proto";
+var PROTO_PATH = "../ConfigsAndDB/gRPC/customerServer.proto";
 var grpc = require("@grpc/grpc-js");
 var protoLoader = require("@grpc/proto-loader");
 var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
@@ -16,7 +16,7 @@ const process = require("process");
 process.chdir(__dirname);
 console.log(process.cwd());
 
-var customerDB = require("../Backend/startCustomerDB");
+var customerDB = require("./customerDBStub.js");
 
 // ------------------addCustomer---------------------grpc----------------
 function addCustomer(call, callback) {

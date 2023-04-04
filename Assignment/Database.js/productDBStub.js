@@ -3,7 +3,7 @@
 const fs = require("fs");
 
 // Storing the JSON format data in myObject
-var productData = fs.readFileSync("../Backend/data/product_data.json");
+var productData = fs.readFileSync("../ConfigsAndDB/databases/product_data.json");
 var productDataObject = JSON.parse(productData);
 
 
@@ -15,7 +15,7 @@ function updateProductQuantity(productId, quantity){
         }
     }
     var newData2 = JSON.stringify(productDataObject);
-    fs.writeFile("./data/product_data.json", newData2, (err) => {
+    fs.writeFile("../ConfigsAndDB/databases/product_data.json", newData2, (err) => {
       // Error checking
       if (err) throw err;
       console.log("Product data updated");
@@ -29,7 +29,7 @@ function changeSalePrice(productId, salePrice){
         }
     }
     var newData2 = JSON.stringify(productDataObject);
-    fs.writeFile("./data/product_data.json", newData2, (err) => {
+    fs.writeFile("../ConfigsAndDB/databases/product_data.json", newData2, (err) => {
       // Error checking
       if (err) throw err;
       console.log("Product data updated");
@@ -62,7 +62,7 @@ function putItemOnSale(productId){
         }
     }
     var newData2 = JSON.stringify(productDataObject);
-    fs.writeFile("./data/product_data.json", newData2, (err) => {
+    fs.writeFile("../ConfigsAndDB/databases/product_data.json", newData2, (err) => {
       // Error checking
       if (err) throw err;
       console.log("Product data updated");
@@ -76,7 +76,7 @@ function removeItemFromSale(productId){
         }       
     }
     var newData2 = JSON.stringify(productDataObject);
-    fs.writeFile("./data/product_data.json", newData2, (err) => {
+    fs.writeFile("../ConfigsAndDB/databases/product_data.json", newData2, (err) => {
         // Error checking
         if (err) throw err;
         console.log("Product data updated");

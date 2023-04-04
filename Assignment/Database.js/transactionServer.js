@@ -1,7 +1,7 @@
 var net = require("net");
 var grpc = require("@grpc/grpc-js");
 var protoLoader = require("@grpc/proto-loader");
-var PROTO_PATH_TRANSACTION = "./transactionServer.proto";
+var PROTO_PATH_TRANSACTION = "../ConfigsAndDB/gRPC/transactionServer.proto";
 
 var packageDefinition = protoLoader.loadSync(PROTO_PATH_TRANSACTION, {
   keepCase: true,
@@ -15,7 +15,7 @@ var transactdb = grpc.loadPackageDefinition(packageDefinition).transactiondb;
 const process = require("process");
 process.chdir(__dirname);
 console.log(process.cwd());
-var transactionDB = require("../Backend/startTransactionsDB");
+var transactionDB = require("./startTransactionsDB");
 
 function getSellerRating(call, callback) {
   reqdata = JSON.parse(call.request.data);
