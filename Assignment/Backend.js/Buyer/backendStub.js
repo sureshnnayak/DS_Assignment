@@ -47,7 +47,7 @@ const addUser = async (data) => {
   console.log("addUser  backendStub");
   return new Promise((resolve, reject) => {
     clientCustomer.addCustomer(
-      { data: JSON.stringify(data) },
+      { username: data.username, password:data.password },
       function (err, response) {
         console.log("status:", JSON.parse(response.status));
         resolve(JSON.parse(response.status));

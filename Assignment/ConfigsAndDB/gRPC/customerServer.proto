@@ -11,15 +11,20 @@ service CustomerDB {
 }
 
 message Credentials {
-    string data = 1;
+  string username = 1;
+  string password = 2;
 }
 
 // The request message containing the user's name.
 message CustomerDetails {
-  string data = 1;
+  string username = 1;
+  string password = 2;
+  bool customerType = 3;
+  
 }
 
 // The response message containing the greetings
 message Status {
-  string status = 1;
+  string responseType = 1;
+  string message = 2;
 }

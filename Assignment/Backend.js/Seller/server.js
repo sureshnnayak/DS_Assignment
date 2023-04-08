@@ -60,18 +60,15 @@ app.use(bp.urlencoded({ extended: true }));
 // ------------------createAccount---------------------grpc----------------
 app.post("/createAccount", (req, res) => {
   console.log("Creating account");
-
-  req.body.id = req.body.username + Date.now();
-  req.body.feedbackNeg = 0;
-  req.body.feedbackPos = 0;
-  req.body.itemsSold = 0;
-  req.body.loginSessions = 0;
-  
   clientCustomer.addCustomer(
-    { data: JSON.stringify(req.body) },
+    {
+      username: req.body.username,
+      password: req.body.password,
+      customerType: false,
+    },
     function (err, response) {
-      console.log("status:", JSON.parse(response.status));
-      res.send(200, JSON.parse(response.status));
+      console.log("status:", response.message);
+      res.send(200, {requestType:response.requestType, message:response.message});
     }
   );
 });
@@ -80,10 +77,10 @@ app.post("/createAccount", (req, res) => {
 app.post("/login", (req, res) => {
   // res.send('Hello World!')
   clientCustomer.loginCustomer(
-    { data: JSON.stringify(req.body) },
+    { username: req.body.username, password: req.body.password },
     function (err, response) {
-      console.log("status:", JSON.parse(response.status));
-      res.send(200, JSON.parse(response.status));
+      console.log("status:", response);
+      res.send(200, {requestType:response.requestType, message:response.message});
     }
   );
 });

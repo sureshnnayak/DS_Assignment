@@ -41,10 +41,8 @@ app.post("/createAccount", async (req, res) => {
   //await
   //addUser(JSON.stringify(req.body));
 
-  req.body.id = req.body.username + Date.now();
-  req.body.itemsBought = 0;
-  req.body.loginSessions = 0;
-  var result = await addUser(req.body);
+
+  var result = await addUser({username: req.body.username, password:req.body.password, customerType: true});
 
   newData = {
     responseType: "SUCCESS",
