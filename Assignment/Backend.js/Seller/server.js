@@ -4,9 +4,9 @@ const bp = require("body-parser");
 var grpc = require("@grpc/grpc-js");
 var protoLoader = require("@grpc/proto-loader");
 
-var PROTO_PATH_CUSTOMER = "./customerServer.proto";
-var PROTO_PATH_PRODUCT = "./productServer.proto";
-var PROTO_PATH_TRANSACTION = "./transactionServer.proto";
+var PROTO_PATH_CUSTOMER = "../../ConfigsAndDB/gRPC/customerServer.proto";
+var PROTO_PATH_PRODUCT = "../../ConfigsAndDB/gRPC/productServer.proto";
+var PROTO_PATH_TRANSACTION = "../../ConfigsAndDB/gRPC/transactionServer.proto";
 
 // ------------------Customer DB connection---------------------grpc----------------
 var packageDefinitionCustomer = protoLoader.loadSync(PROTO_PATH_CUSTOMER, {
