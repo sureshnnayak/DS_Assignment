@@ -23,6 +23,7 @@ const {
   addUser,
   login,
   isLogedIn,
+  logout,
   getUser,
   searchProducts,
   getTransactions,

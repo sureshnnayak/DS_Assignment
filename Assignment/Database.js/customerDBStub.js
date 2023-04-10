@@ -31,16 +31,21 @@ function login(userId) {
   return false;
 }
 
-function logout(userId) {
+function logoutCustomer(sessionID) {
+  console.log("logoutCustomer Backend");
   for (var i = 0; i < customerDataObject.length; i++) {
-    if (customerDataObject[i].id == userId) {
+
+    if (customerDataObject[i].sessionID == sessionID) {
       if (customerDataObject[i].loginSessions != 0) {
         customerDataObject[i].loginSessions -= 1;
-        return true;
+        if (customerDataObject[i].loginSessions == 0) {
+          customerDataObject[i].sessionID = null;
+        } 
       }
+      return true;
     }
   }
   return false;
 }
 
-module.exports = { addUser, getUser };
+module.exports = { addUser, getUser, logoutCustomer, login };

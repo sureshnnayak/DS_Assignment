@@ -82,6 +82,17 @@ const isLogedIn = async (data) => {
     );
   });
 };
+const logout = async (data) => {
+  console.log("Logout  backendStub", data.sessionID);
+  return new Promise((resolve, reject) => {
+    clientCustomer.logoutCustomer(
+      {sessionID: data.sessionID },
+      function (err, response) {
+        resolve(response);
+      }
+    );
+  });
+};
 
 function getUser(data) {
   console.log("getUser  backendStub");
@@ -194,6 +205,7 @@ module.exports = {
   addUser,
   login,
   isLogedIn,
+  logout,
   soapCall,
   getUser,
   searchProducts,

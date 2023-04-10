@@ -8,11 +8,16 @@ service CustomerDB {
   // Sends a greeting
   rpc addCustomer (CustomerDetails) returns (Status) {}
   rpc loginCustomer (Credentials) returns (LoginStatus) {}
+  rpc logoutCustomer (sessionID) returns (Status) {}
 }
+
 
 message Credentials {
   string username = 1;
   string password = 2;
+}
+message sessionID {
+  string sessionID = 1;
 }
 
 // The request message containing the user's name.

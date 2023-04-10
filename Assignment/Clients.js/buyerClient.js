@@ -12,7 +12,7 @@ const rl = readline.createInterface({
 	terminal: false
 });
 
-let sessiojnID = null;
+let sessionID = null;
 
 // send request to client server
 /*
@@ -104,7 +104,7 @@ const printOptions = (serverConnection) => {
 						.post("http://localhost:1337/login", data)
 						.then(function (response) {
 						  console.log(response.data);
-						  sessiojnID = response.data.sessionID;
+						  sessionID = response.data.sessionID;
 						  printOptions();
 						})
 						.catch(function (error) {
@@ -117,11 +117,13 @@ const printOptions = (serverConnection) => {
 			case "3":
 				console.log("Logout");
 				const data = {
-					requestType: "LOGOUT"
+					requestType: "LOGOUT",
+					sessionID: sessionID
 				};
 				axios
 				.post("http://localhost:1337/logout", data)
 				.then(function (response) {
+					console.log("response");
 				  console.log(response.data);
 				  printOptions();
 				})

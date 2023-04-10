@@ -109,10 +109,23 @@ function logoutCustomer(call, callback) {
     sissionID: call.request.sessionID,
   };
   console.log("request for customer logout for :", reqdata);
-  user = customerDB.logoutUser(sissionID);
+  result = customerDB.logoutCustomer(call.request.sessionID);
+  console.log("obtained from DB:", result);
+  if (result == true) {
+    var newData = {
+      responseType: "SUCCESS",
+      message: "Request processed successfully",
+    };
+  } else {
+    var newData = {
+      responseType: "FAILURE",
+      message: "Invalid session ID",
+    };
+  }
+  console.log("sending response:", newData);
   callback(null, {
-    responseType: "SUCCESS",
-    message: "Request processed successfully",
+    responseType: newData.responseType,
+    message:  newData.message,
   });
 }
 
@@ -123,6 +136,7 @@ function main() {
   server.addService(custdb.CustomerDB.service, {
     addCustomer: addCustomer,
     loginCustomer: loginCustomer,
+    logoutCustomer: logoutCustomer,
   });
   server.bindAsync(
     "0.0.0.0:50051",
