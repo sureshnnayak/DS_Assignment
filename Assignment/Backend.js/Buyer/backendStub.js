@@ -47,11 +47,37 @@ const addUser = async (data) => {
   console.log("addUser  backendStub");
   return new Promise((resolve, reject) => {
     clientCustomer.addCustomer(
-      { username: data.username, password:data.password },
+      { username: data.username, password:data.password, customerType:data.customerType },
       function (err, response) {
-        console.log("status:", JSON.parse(response.status));
-        resolve(JSON.parse(response.status));
-        //res.send(200, JSON.parse(response.status));
+        resolve(response);
+      }
+    );
+  });
+};
+
+
+/*
+ */
+const login = async (data) => {
+  console.log("login  backendStub");
+  return new Promise((resolve, reject) => {
+    clientCustomer.loginCustomer(
+      {username: data.username, password:data.password, customerType:data.customerType },
+      function (err, response) {
+        console.log("responce:", response);
+        resolve(response);
+      }
+    );
+  });
+};
+
+const isLogedIn = async (data) => {
+  console.log("isLogedIn  backendStub");
+  return new Promise((resolve, reject) => {
+    clientCustomer.isLogedIn(
+      {sessiojnID: data.sessiojnID },
+      function (err, response) {
+        resolve(response);
       }
     );
   });
@@ -81,7 +107,7 @@ function soapCall(data) {
         cardnumber: "2222123343211234",
         securitycode: "555",
       };
-      // call the service
+      // call the service   
       client.FinTransactions(args, function (err, res) {
         if (err) throw err;
         console.log("Result is", res.result);
@@ -166,6 +192,8 @@ function getFeedback(data) {
 
 module.exports = {
   addUser,
+  login,
+  isLogedIn,
   soapCall,
   getUser,
   searchProducts,

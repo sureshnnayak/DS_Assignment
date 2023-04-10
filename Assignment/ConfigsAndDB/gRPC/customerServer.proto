@@ -7,7 +7,7 @@ package customerdb;
 service CustomerDB {
   // Sends a greeting
   rpc addCustomer (CustomerDetails) returns (Status) {}
-  rpc loginCustomer (Credentials) returns (Status) {}
+  rpc loginCustomer (Credentials) returns (LoginStatus) {}
 }
 
 message Credentials {
@@ -27,4 +27,11 @@ message CustomerDetails {
 message Status {
   string responseType = 1;
   string message = 2;
+}
+
+//Login status containing the session ID 
+message LoginStatus {
+  string responseType = 1;
+  string message = 2;
+  string sessionID = 3;
 }

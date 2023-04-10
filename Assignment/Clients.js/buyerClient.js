@@ -12,6 +12,8 @@ const rl = readline.createInterface({
 	terminal: false
 });
 
+let sessiojnID = null;
+
 // send request to client server
 /*
 Create an account: sets up username and password 
@@ -102,6 +104,7 @@ const printOptions = (serverConnection) => {
 						.post("http://localhost:1337/login", data)
 						.then(function (response) {
 						  console.log(response.data);
+						  sessiojnID = response.data.sessionID;
 						  printOptions();
 						})
 						.catch(function (error) {
