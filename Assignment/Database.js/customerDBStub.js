@@ -31,6 +31,16 @@ function login(userId) {
   return false;
 }
 
+function isLogedIn(sessionID) {
+  for (var i = 0; i < customerDataObject.length; i++) {
+    if (customerDataObject[i].sessionID == sessionID) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
 function logoutCustomer(sessionID) {
   console.log("logoutCustomer Backend");
   for (var i = 0; i < customerDataObject.length; i++) {
@@ -48,4 +58,4 @@ function logoutCustomer(sessionID) {
   return false;
 }
 
-module.exports = { addUser, getUser, logoutCustomer, login };
+module.exports = { addUser, getUser, logoutCustomer, login, isLogedIn };

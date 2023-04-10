@@ -158,7 +158,7 @@ const printOptions = (serverConnection) => {
 					rl.question("Enter quantity: ", (quantity) => {
 						const data = {
 							itemId: itemId,
-							userId: "suresh",
+							sessionID: sessionID,
 							quantity: quantity
 						};
 						axios

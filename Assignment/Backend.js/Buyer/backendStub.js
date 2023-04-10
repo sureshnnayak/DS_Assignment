@@ -59,10 +59,10 @@ const addUser = async (data) => {
 /*
  */
 const login = async (data) => {
-  console.log("login  backendStub");
+  console.log("login  backendStub, session Id");
   return new Promise((resolve, reject) => {
     clientCustomer.loginCustomer(
-      {username: data.username, password:data.password, customerType:data.customerType },
+      {username: data.username, password:data.password},
       function (err, response) {
         console.log("responce:", response);
         resolve(response);
@@ -72,10 +72,10 @@ const login = async (data) => {
 };
 
 const isLogedIn = async (data) => {
-  console.log("isLogedIn  backendStub");
+  console.log("isLogedIn  backendStub", data);
   return new Promise((resolve, reject) => {
     clientCustomer.isLogedIn(
-      {sessiojnID: data.sessiojnID },
+      {sessionID: data.sessionID },
       function (err, response) {
         resolve(response);
       }

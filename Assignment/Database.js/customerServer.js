@@ -130,6 +130,57 @@ function logoutCustomer(call, callback) {
 }
 
 
+function isLogedIn(call, callback) {
+  var reqdata = {
+    sissionID: call.request.sessionID,
+  };
+  console.log("request for isLoggedin :", reqdata);
+  result = customerDB.isLogedIn(call.request.sessionID);
+  console.log("obtained from DB:", result);
+  if (result == true) {
+    var newData = {
+      responseType: "SUCCESS",
+      message: "Request processed successfully",
+    };
+  } else {
+    var newData = {
+      responseType: "FAILURE",
+      message: "Invalid session ID",
+    };
+  }
+  console.log("sending response:", newData);
+  callback(null, {
+    responseType: newData.responseType,
+    message:  newData.message,
+  });
+}
+
+function addProduct(call, callback) {
+
+  console.log("request for addProduct :", reqdata);
+  result = customerDB.isLogedIn(call.request.sessionID);
+  console.log("obtained from DB:", result);
+  if (result == true) {
+    var newData = {
+      responseType: "SUCCESS",
+      message: "Request processed successfully",
+    };
+  } else {
+    var newData = {
+      responseType: "FAILURE",
+      message: "Invalid session ID",
+    };
+  }
+  console.log("sending response:", newData);
+  callback(null, {
+    responseType: newData.responseType,
+    message:  newData.message,
+  });
+}
+
+
+
+
 // ------------------main---------------------grpc----------------
 function main() {
   var server = new grpc.Server();
@@ -137,6 +188,8 @@ function main() {
     addCustomer: addCustomer,
     loginCustomer: loginCustomer,
     logoutCustomer: logoutCustomer,
+    isLogedIn: isLogedIn,
+    addProduct: addProduct,
   });
   server.bindAsync(
     "0.0.0.0:50051",
