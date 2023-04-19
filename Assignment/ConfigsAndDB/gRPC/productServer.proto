@@ -8,7 +8,7 @@ service ProductDB {
   // Sends a greeting
   rpc getProductOnSale (Empty) returns (Status) {}
   rpc changeSalePrice (productId) returns (Status) {}
-  rpc putItemOnSale(itemList) returns (Status) {}
+  rpc putItemOnSale(itemOnSale) returns (Status2) {}
   rpc removeItemFromSale(itemList) returns (Status) {}
   rpc addProduct(itemList) returns (Status) {}
   rpc searchItem(item) returns (Status) {}
@@ -25,6 +25,14 @@ message productName {
 }
 message itemList {
     string data = 1;
+}
+message itemOnSale {
+    string itemName = 1;
+    string itemDescription = 2;
+    string itemPrice = 3;
+    string quantity = 4;
+    string username = 5;
+    repeated string keywords = 6;
 }
 
 message item {
@@ -43,4 +51,10 @@ message CustomerDetails {
 // The response message containing the greetings
 message Status {
   string status = 1;
+}
+
+
+message Status2 {
+  string responseType = 1;
+  string message = 2;
 }

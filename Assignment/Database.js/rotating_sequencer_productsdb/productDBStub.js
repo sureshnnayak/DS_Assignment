@@ -3,7 +3,7 @@
 const fs = require("fs");
 
 // Storing the JSON format data in myObject
-var productData = fs.readFileSync("../ConfigsAndDB/databases/product_data.json");
+var productData = fs.readFileSync("../../ConfigsAndDB/databases/product_data.json");
 var productDataObject = JSON.parse(productData);
 
 
@@ -101,16 +101,6 @@ function getProductSeller(productId){
     }
 }
 
-function addProduct(item){
-   productDataObject.push(item);
-    var newData2 = JSON.stringify(productDataObject);
-    fs.writeFile("../ConfigsAndDB/databases/product_data.json", newData2, (err) => {
-      // Error checking
-      if (err) throw err;
-      console.log("Product data updated");
-    });
-}
-
 
 module.exports = {  updateProductQuantity,
      getProductOnSale, 
@@ -120,6 +110,5 @@ module.exports = {  updateProductQuantity,
      searchProducts,
      getProductSeller,
      addFeedback,
-     addProduct
     };
   

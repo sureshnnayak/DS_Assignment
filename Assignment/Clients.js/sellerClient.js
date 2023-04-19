@@ -9,6 +9,8 @@ const rl = readline.createInterface({
   terminal: false,
 });
 
+var uname = "";
+
 const {
   createAcccountMSG,
   getLoginMSG,
@@ -29,8 +31,8 @@ const printOptions = () => {
   console.log("5. Put an item for sale");
   console.log("6. Remove an item from sale");
   console.log("7. Display items for sale");
-  console.log("8. Run Average Response Time Test");
-  console.log("9. Run Average Throughput Test");
+  // console.log("8. Run Average Response Time Test");
+  // console.log("9. Run Average Throughput Test");
 
   rl.question("Enter your option: ", (option) => {
     switch (option) {
@@ -69,6 +71,7 @@ const printOptions = () => {
               .post("http://localhost:1338/login", data)
               .then(function (response) {
                 console.log(response.data);
+                uname = username;
                 printOptions();
               })
               .catch(function (error) {
@@ -119,21 +122,28 @@ const printOptions = () => {
         rl.question("Enter item name: ", (itemName) => {
           rl.question("Enter item description: ", (itemDescription) => {
             rl.question("Enter item price: ", (itemPrice) => {
-              let data = {
-                itemName: itemName,
-                itemDescription: itemDescription,
-                itemPrice: itemPrice,
-              };
+              rl.question("Enter item Quantity: ", (Quantity) => {
+                rl.question("Enter item Keywords: ", (Keywords) => {
+                  let data = {
+                    itemName: itemName,
+                    itemDescription: itemDescription,
+                    itemPrice: itemPrice,
+                    quantity: Quantity,
+                    username: uname,
+                    keywords:Keywords.split(/\s+/)
+                  };
 
-              axios
-                .post("http://localhost:1338/addItemToSale", data)
-                .then(function (response) {
-                  console.log(response.data);
-                  printOptions();
-                })
-                .catch(function (error) {
-                  console.log(error);
+                  axios
+                    .post("http://localhost:1338/addItemToSale", data)
+                    .then(function (response) {
+                      console.log(response.data);
+                      printOptions();
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                    });
                 });
+              });
             });
           });
         });
@@ -180,7 +190,7 @@ const printOptions = () => {
               password: "password",
             };
             var beforeTime = Date.now();
-            for (i = 0; i < 10*noUsers; i++) {
+            for (i = 0; i < 10 * noUsers; i++) {
               let promise = axios.post(
                 "http://localhost:1338/createAccount",
                 data
@@ -208,7 +218,7 @@ const printOptions = () => {
               password: "password",
             };
             var beforeTime = Date.now();
-            for (i = 0; i < 1000*noUsers; i++) {
+            for (i = 0; i < 1000 * noUsers; i++) {
               let promise = axios.post(
                 "http://localhost:1338/createAccount",
                 data

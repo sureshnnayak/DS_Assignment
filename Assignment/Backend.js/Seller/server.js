@@ -68,7 +68,10 @@ app.post("/createAccount", (req, res) => {
     },
     function (err, response) {
       console.log("status:", response.message);
-      res.send(200, {requestType:response.requestType, message:response.message});
+      res.send(200, {
+        requestType: response.requestType,
+        message: response.message,
+      });
     }
   );
 });
@@ -80,7 +83,10 @@ app.post("/login", (req, res) => {
     { username: req.body.username, password: req.body.password },
     function (err, response) {
       console.log("status:", response);
-      res.send(200, {requestType:response.requestType, message:response.message});
+      res.send(200, {
+        requestType: response.requestType,
+        message: response.message,
+      });
     }
   );
 });
@@ -108,15 +114,24 @@ app.post("/getSellerRating", (req, res) => {
 app.post("/addItemToSale", (req, res) => {
   // res.send('Hello World!')
 
-  clientProduct.putItemOnSale(req.body.productId);
+  clientProduct.putItemOnSale(
+    {
+      itemName: req.body.itemName,
+      itemDescription: req.body.itemDescription,
+      itemPrice: req.body.itemPrice,
+      quantity: req.body.quantity,
+      username: req.body.username,
+      keywords: req.body.keywords,
+    },
+    function (err, response) {
+      console.log("status:", response);
+      res.send(200, {
+        requestType: response.requestType,
+        message: response.message,
+      });
+    }
+  );
 
-  newData = {
-    responseType: "SUCCESS",
-    message: "Request processed successfully",
-  };
-
-  console.log("Adding item for sale");
-  res.send(200, newData);
 });
 
 // ------------------removeItemFromSale---------------------??X----------------
