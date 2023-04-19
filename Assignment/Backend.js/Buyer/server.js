@@ -21,6 +21,9 @@ app.use(bp.urlencoded({ extended: true }));
 
 const {
   addUser,
+  login,
+  isLogedIn,
+  logout,
   getUser,
   searchProducts,
   getTransactions,
@@ -33,56 +36,32 @@ const {
 const { response } = require("express");
 var cart = null;
 
+/*
+*/
 app.post("/createAccount", async (req, res) => {
-  // res.send('Hello World!')
-  console.log("Creating account");
-  // req.body.id = req.body.username ;//+ Date.now();
-  console.log(req.body);
-  //await
-  //addUser(JSON.stringify(req.body));
-
-
+  console.log("Creating account",req.body);
   var result = await addUser({username: req.body.username, password:req.body.password, customerType: true});
-
-  newData = {
-    responseType: "SUCCESS",
-    message: "Request processed successfully",
-  };
   res.send(200, result);
 });
 
+
+/*
+*/
 app.post("/login", async (req, res) => {
-  // res.send('Hello World!')
-  //user = await getUser(JSON.stringify(req.body.username));
-  resp = await getUser(req.body);
-  console.log(resp);
-  if (resp.responseType == "SUCCESS") {
-    userCart = {
-      userId: req.body.username,
-      products: [],
-    };
-    if (cart == null) {
-      cart = [userCart];
-    } else {
-      cart.push(userCart);
-    }
-  }
-  console.log(cart);
-  res.send(200, resp);
+  console.log("Login User",req.body);
+  var result = await login({username: req.body.username, password:req.body.password, customerType: true});
+  res.send(200, result);
+  });
+
+/*
+*/
+app.post("/logout",async  (req, res) => {
+  var result = await logout({sessionID: req.body.sessionID, customerType: true});
+  res.send(200, result);
 });
 
-app.post("/logout", (req, res) => {
-  if (cart != null) {
-    cart = cart.filter((item) => item.userId != req.body.userId);
-  }
-  newData = {
-    responseType: "SUCCESS",
-    message: "Request processed successfully",
-  };
-  res.send(200, newData);
-  console.log("Logging out");
-});
-
+/*
+*/
 app.post("/searchProducts", async (req, res) => {
   console.log("Searching products");
   resp = await searchProducts(JSON.stringify(req.body));
@@ -90,186 +69,66 @@ app.post("/searchProducts", async (req, res) => {
   res.send(200, resp);
 });
 
-app.post("/addToCart", (req, res) => {
-  console.log("Adding to cart");
-  newData = null;
-  if (cart == null) {
-    newdata = {
-      responseType: "FAILURE",
-      message: "Login before adding items to cart",
-    };
-    console.log("user not found\n");
-  } else {
-    userCart = null;
-    for (var i = 0; i < cart.length; i++) {
-      if (cart[i].userId == req.body.userId) {
-        cart[i].products.push(req.body.itemId);
-        userCart = cart[i].products;
-        newData = {
-          responseType: "SUCCESS",
-          message: "Request processed successfully",
-          cart: userCart,
-        };
-      }
-    }
-    if (newData == null) {
-      newdata = {
-        responseType: "FAILURE",
-        message: "Login before adding items to cart",
-      };
-    }
+/*
+ * check if user is logged in or not
+ * if not logged in, return error
+ * if logged in, add to cart   */
+app.post("/addToCart", async (req, res) => {  
+  var result = await isLogedIn({sessionID: req.body.sessionID, customerType: true});
+  if (result.responseType == "SUCCESS"){
+    var result = await addToCart({sessionID: req.body.sessionID,  productID: req.body.productID,quantity: req.body.quantity});
   }
-  res.send(200, newData);
+  res.send(200, result);
 });
 
-app.post("/removeFromCart", (req, res) => {
+
+app.post("/removeFromCart", async (req, res) => {
   console.log("Removing from cart");
-  newData = null;
-  console.log(req.body);
-  if (cart == null) {
-    newdata = {
-      responseType: "FAILURE",
-      message: "Login before modifying the cart",
-    };
-    console.log("user not found\n");
-  } else {
-    userCart = null;
-    for (var i = 0; i < cart.length; i++) {
-      if (cart[i].userId == req.body.userId) {
-        //cart = cart.filter((item) => item.userId != req.body.userId);
-        cart[i].products = cart[i].products.filter(
-          (item) => item != req.body.itemId
-        );
 
-        //cart[i].products.push(req.body.itemId);
-        userCart = cart[i].products;
-        newData = {
-          responseType: "SUCCESS",
-          message: "Request processed successfully",
-          cart: userCart,
-        };
-      }
-    }
-    if (newData == null) {
-      newdata = {
-        responseType: "FAILURE",
-        message: "Login before adding items to cart",
-      };
-    }
+  var result = await isLogedIn({sessionID: req.body.sessionID, customerType: true});
+  if (result == true){
+    var result = await removeFromCart({sessionID: req.body.sessionID, customerType: true, productID: req.body.productID});
   }
-  res.send(200, newData);
+  res.send(200, result);
 });
 
-app.post("/clearCart", (req, res) => {
+
+app.post("/clearCart", async (req, res) => {
   console.log("Clearing cart");
-  console.log(req.body);
-  newData = null;
-  console.log(req.body);
-  if (cart == null) {
-    newdata = {
-      responseType: "FAILURE",
-      message: "Login before modifying the cart",
-    };
-    console.log("user not found\n");
-  } else {
-    userCart = null;
-    for (var i = 0; i < cart.length; i++) {
-      if (cart[i].userId == req.body.userId) {
-        //cart = cart.filter((item) => item.userId != req.body.userId);
-        cart[i].products = [];
 
-        //cart[i].products.push(req.body.itemId);
-        userCart = cart[i].products;
-        newData = {
-          responseType: "SUCCESS",
-          message: "Request processed successfully",
-          cart: userCart,
-        };
-      }
-    }
-    if (newData == null) {
-      newdata = {
-        responseType: "FAILURE",
-        message: "Login before adding items to cart",
-      };
-    }
+  var result = await isLogedIn({sessionID: req.body.sessionID, customerType: true});
+  if (result == true){
+    var result = await clearCart({sessionID: req.body.sessionID, customerType: true});
   }
-
-  // cart = cart.filter((item) => item.userId != req.body.userId);
-  // newData = {
-  //     responseType: "SUCCESS",
-  //     message: "Request processed successfully",
-  // };
-  res.send(200, newData);
+  res.send(200, result);
 });
 
-app.post("/displayCart", (req, res) => {
-  // res.send('Hello World!')
-  userCart = null;
-  console.log("Getting cart");
-  console.log(req.body);
-  console.log(cart);
-  if (cart != null) {
-    for (var i = 0; i < cart.length; i++) {
-      if (cart[i].userId == req.body.userId) {
-        userCart = cart[i];
-      }
-    }
-  }
 
-  if (userCart == null) {
-    newData = {
-      responseType: "FAILURE",
-      message: "PLease login to access the cart",
-    };
-  } else {
-    newData = {
-      responseType: "SUCCESS",
-      message: "Request processed successfully",
-      cart: userCart.products,
-    };
+
+app.post("/displayCart", async (req, res) => {
+  var result = await isLogedIn({sessionID: req.body.sessionID, customerType: true});
+  if (result == true){
+    var result = await displayCart({sessionID: req.body.sessionID, customerType: true});
   }
-  res.send(200, newData);
+  res.send(200, result);
 });
+
 
 app.post("/makePurchase", async (req, res) => {
   console.log("Making purchase");
-  console.log(req.body);
-  // Create client
-  var newData = null;
-  if (cart == null) {
-    newdata = {
-      responseType: "FAILURE",
-      message: "Login before adding items to cart",
-    };
-    console.log("user not found\n");
-  } else {
-    for (var i = 0; i < cart.length; i++) {
-      if (cart[i].userId == req.body.userId) {
-        var respBank = await soapCall("data")
-        console.log(respBank);
 
-        if (respBank.result == "SUCCESS") {
-          cart[i].products = [];
-          newData = {
-            responseType: "SUCCESS",
-            message: "Request processed successfully",
-          };
-        } else {
-          newData = {
-            responseType: "FAILURE",
-            message: "Payment declined",
-          };
-        }
-      }
-      res.send(200, newData);
+  var result = await isLogedIn({sessionID: req.body.sessionID, customerType: true});
+  if (result == true){
+    var respBank = await soapCall("data")
+    console.log(respBank);
+
+    if (respBank.result == "SUCCESS") {
+      result = await clearCart({sessionID: req.body.sessionID, customerType: true});
     }
   }
+  res.send(200, result);
 });
 
-async function soap_request(obj){
-
-}
 
 app.post("/getFeedback", async (req, res) => {
   // res.send('Hello World!')

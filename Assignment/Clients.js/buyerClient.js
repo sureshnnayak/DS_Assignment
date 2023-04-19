@@ -12,6 +12,8 @@ const rl = readline.createInterface({
 	terminal: false
 });
 
+let sessionID = null;
+
 // send request to client server
 /*
 Create an account: sets up username and password 
@@ -102,6 +104,7 @@ const printOptions = (serverConnection) => {
 						.post("http://localhost:1337/login", data)
 						.then(function (response) {
 						  console.log(response.data);
+						  sessionID = response.data.sessionID;
 						  printOptions();
 						})
 						.catch(function (error) {
@@ -114,11 +117,13 @@ const printOptions = (serverConnection) => {
 			case "3":
 				console.log("Logout");
 				const data = {
-					requestType: "LOGOUT"
+					requestType: "LOGOUT",
+					sessionID: sessionID
 				};
 				axios
 				.post("http://localhost:1337/logout", data)
 				.then(function (response) {
+					console.log("response");
 				  console.log(response.data);
 				  printOptions();
 				})
@@ -153,7 +158,7 @@ const printOptions = (serverConnection) => {
 					rl.question("Enter quantity: ", (quantity) => {
 						const data = {
 							itemId: itemId,
-							userId: "suresh",
+							sessionID: sessionID,
 							quantity: quantity
 						};
 						axios

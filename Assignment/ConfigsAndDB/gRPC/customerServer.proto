@@ -1,4 +1,3 @@
-
 syntax = "proto3";
 
 package customerdb;
@@ -6,13 +5,24 @@ package customerdb;
 // The greeting service definition.
 service CustomerDB {
   // Sends a greeting
-  rpc addCustomer (CustomerDetails) returns (Status) {}
-  rpc loginCustomer (Credentials) returns (Status) {}
+  rpc addCustomer (Credentials) returns (Status) {}
+  rpc loginCustomer (Credentials) returns (LoginStatus) {}
+  rpc logoutCustomer (sessionID) returns (Status) {}
+  rpc isLogedIn (sessionID) returns (Status) {}
+  rpc addProduct (productToAdd) returns (Status) {}
 }
 
+message productToAdd {
+  string sessionID = 1;
+  string productID = 2;
+  string quantity = 3;
+}
 message Credentials {
   string username = 1;
   string password = 2;
+}
+message sessionID {
+  string sessionID = 1;
 }
 
 // The request message containing the user's name.
@@ -27,4 +37,11 @@ message CustomerDetails {
 message Status {
   string responseType = 1;
   string message = 2;
+}
+
+//Login status containing the session ID 
+message LoginStatus {
+  string responseType = 1;
+  string message = 2;
+  string sessionID = 3;
 }
