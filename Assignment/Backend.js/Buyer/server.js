@@ -23,6 +23,8 @@ const {
   addUser,
   login,
   isLogedIn,
+  addToCart,
+  clearCart,
   logout,
   getUser,
   searchProducts,
@@ -32,6 +34,7 @@ const {
   getSellerRating,
   addFeedback,
   soapCall,
+  getCart,
 } = require("./backendStub");
 const { response } = require("express");
 var cart = null;
@@ -74,11 +77,12 @@ app.post("/searchProducts", async (req, res) => {
  * if not logged in, return error
  * if logged in, add to cart   */
 app.post("/addToCart", async (req, res) => {  
-  var result = await isLogedIn({sessionID: req.body.sessionID, customerType: true});
-  console.log("Adding to cart", result);
-  if (result.responseType == "SUCCESS"){
-    var result = await addToCart({sessionID: req.body.sessionID,  productID: req.body.productID,quantity: req.body.quantity});
-  }
+  console.log("Adding to cart", req.body);
+  // var result = await isLogedIn({sessionID: req.body.sessionID, customerType: true});
+  // console.log("Adding to cart", result);
+  // if (result.responseType == "SUCCESS"){
+    var result = await addToCart({sessionID: req.body.sessionID,  productID: req.body.itemId,quantity: req.body.quantity});
+  // }
   res.send(200, result);
 });
 
@@ -96,38 +100,27 @@ app.post("/removeFromCart", async (req, res) => {
 
 app.post("/clearCart", async (req, res) => {
   console.log("Clearing cart");
-
-  var result = await isLogedIn({sessionID: req.body.sessionID, customerType: true});
-  if (result == true){
-    var result = await clearCart({sessionID: req.body.sessionID, customerType: true});
-  }
+  var result = await clearCart({sessionID: req.body.sessionID, customerType: true});
   res.send(200, result);
 });
 
 
 
 app.post("/displayCart", async (req, res) => {
-  var result = await isLogedIn({sessionID: req.body.sessionID, customerType: true});
-  if (result == true){
-    var result = await displayCart({sessionID: req.body.sessionID, customerType: true});
-  }
+  var result = await getCart({sessionID: req.body.sessionID, customerType: true});
   res.send(200, result);
 });
 
 
 app.post("/makePurchase", async (req, res) => {
   console.log("Making purchase");
-
-  var result = await isLogedIn({sessionID: req.body.sessionID, customerType: true});
-  if (result == true){
-    var respBank = await soapCall("data")
-    console.log(respBank);
-
-    if (respBank.result == "SUCCESS") {
-      result = await clearCart({sessionID: req.body.sessionID, customerType: true});
+    var resp = await soapCall("data")
+    console.log(resp);
+    if (resp.result == "SUCCESS") {
+      resp= await clearCart({sessionID: req.body.sessionID, customerType: true});
     }
-  }
-  res.send(200, result);
+
+  res.send(200, resp);
 });
 
 
