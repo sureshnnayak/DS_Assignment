@@ -75,6 +75,7 @@ app.post("/searchProducts", async (req, res) => {
  * if logged in, add to cart   */
 app.post("/addToCart", async (req, res) => {  
   var result = await isLogedIn({sessionID: req.body.sessionID, customerType: true});
+  console.log("Adding to cart", result);
   if (result.responseType == "SUCCESS"){
     var result = await addToCart({sessionID: req.body.sessionID,  productID: req.body.productID,quantity: req.body.quantity});
   }
