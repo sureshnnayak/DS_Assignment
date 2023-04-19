@@ -49,7 +49,8 @@
     "itemDescription": "a",
     "itemPrice": "a",
     "username": "quiet",
-    "keywords": ["a", "e", "d", "f", "g"]
+    "keywords": ["a", "e", "d", "f", "g"],
+    "itemOnSale": "false"
   },
   {
     "itemName": "a",
@@ -57,7 +58,8 @@
     "itemPrice": "a",
     "quantity": "a",
     "username": "",
-    "keywords": ["a", "b", "c", "d", "e"]
+    "keywords": ["a", "b", "c", "d", "e"],
+    "itemOnSale": "false"
   },
   {
     "itemName": "b",
@@ -65,7 +67,8 @@
     "itemPrice": "b",
     "quantity": "b",
     "username": "",
-    "keywords": ["v", "f", "g", "h", "j", ""]
+    "keywords": ["v", "f", "g", "h", "j", ""],
+    "itemOnSale": "false"
   },
   {
     "itemName": "rom",
@@ -73,7 +76,8 @@
     "itemPrice": "444",
     "quantity": "999",
     "username": "quiet1681863053053",
-    "keywords": ["possum", "dom", "kom", "som"]
+    "keywords": ["possum", "dom", "kom", "som"],
+    "itemOnSale": "false"
   },
   {
     "itemName": "hola",
@@ -81,6 +85,25 @@
     "itemPrice": 992,
     "quantity": 5,
     "username": "quiet1681863053053",
-    "keywords": ["ha", "wai", "koi"]
+    "keywords": ["ha", "wai", "koi"],
+    "itemOnSale": "false"
+  },
+  {
+    "itemName": "suresh",
+    "itemDescription": "this is suresh nayak",
+    "itemPrice": 99,
+    "quantity": 1,
+    "username": "haiyaa1681866833787",
+    "keywords": ["human", "indian", "kannadiga"],
+    "itemOnSale": "false"
+  },
+  {
+    "itemName": "akshay",
+    "itemDescription": "kapse",
+    "itemPrice": 99,
+    "quantity": 1,
+    "username": "uncle1681867073801",
+    "keywords": ["human", "indian", "marathi"],
+    "itemOnSale": "false"
   }
 ]

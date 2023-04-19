@@ -17,7 +17,7 @@ var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 
 var productdb = grpc.loadPackageDefinition(packageDefinition).productdb;
 
-var productDB = require("./productDBStub");
+// var productDB = require("./productDBStub");
 
 class Node {
   constructor(id, port, totalNodes) {
@@ -30,7 +30,7 @@ class Node {
     this.requestQueue = [];
     this.sequenceQueue = [];
     this.database = fs.readFileSync(
-      `../../ConfigsAndDB/databases/rotat_testdb/product_data_${id}.json`
+      `../../ConfigsAndDB/databases/product_data_${id}.json`
     );
     this.productDataObject = JSON.parse(this.database);
 
@@ -71,47 +71,31 @@ class Node {
       (a, b) => a.globalSequenceNumber - b.globalSequenceNumber
     );
 
-    // console.log(`ReqQNode${this.id}`);
-    console.log(
-      `ReqQNode${this.id}` + util.inspect(this.requestQueue, false, null, true)
-    );
-    // console.log(`SeqQNode${this.id}`);
-    console.log(
-      `SeqQNode${this.id}` + util.inspect(this.sequenceQueue, false, null, true)
-    );
-
     // Process messages from both queues when they have matching requestIds
     while (this.requestQueue.length > 0 && this.sequenceQueue.length > 0) {
       const request = this.requestQueue[0];
       const sequence = this.sequenceQueue[0];
 
       if (request.requestId === sequence.requestId) {
-        console.log(`Performing request: ${request.requestId}`);
+        console.log(`Node${this.id} Performing request: ${request.requestId}`);
 
-        switch (request.requestContent["method"]) {
+        switch (request.methodName) {
           case "changeSalePrice":
             this.changeSalePrice(
               request.requestContent["itemId"],
               request.requestContent["salePrice"]
             );
             break;
+            case "addProduct":
+              this.addProduct(request.requestContent);
+              console.log("Here in the right place");
+              break;
+            case "removeItemFromSale":
+              this.removeItemFromSale(request.requestContent);
+              break;
           default:
             console.log("Wrong Method Name");
         }
-        // this.databaseObject[this.requestQueue[0]["requestId"]] =
-        //   this.requestQueue[0]["requestContent"];
-
-        // var newData2 = JSON.stringify(this.databaseObject);
-        // fs.writeFile(
-        //   `../../ConfigsAndDB/databases/rotat_testdb/testdb_${this.id}.json`,
-        //   newData2,
-        //   (err) => {
-        //     // Error checking
-        //     if (err) throw err;
-        //     console.log("Product data updated");
-        //   }
-        // );
-
         this.requestQueue.shift();
         this.sequenceQueue.shift();
         this.globalSequenceNumber++;
@@ -125,12 +109,14 @@ class Node {
       const nextRequest = this.requestQueue[0];
       const myId = this.globalSequenceNumber % this.totalNodes;
 
-      console.log(
-        `Node ${this.id}, myId ${myId}, senderId ${nextRequest.senderId}, globalSeqNumber ${this.globalSequenceNumber}`
-      );
+      // console.log(
+      //   `Node ${this.id}, myId ${myId}, senderId ${nextRequest.senderId}, globalSeqNumber ${this.globalSequenceNumber}`
+      // );
 
       if (this.id === myId) {
-        console.log("I am sequencing this time" + this.id);
+        console.log(`*****************************************`);
+        console.log(`Node${this.id}:I am sequencing this time`);
+        console.log(`*****************************************`);
         const sequenceMessage = {
           type: "sequence",
           globalSequenceNumber: this.globalSequenceNumber,
@@ -158,38 +144,59 @@ class Node {
   }
 
   // Send a request message from a specific node with request content
-  sendRequest(senderId, requestContent) {
+  sendRequest(senderId, requestContent, methodName) {
     const localSequenceNumber = this.localSequenceNumbers[senderId]++;
     const requestMessage = {
       type: "request",
       requestId: uuid.v4(),
       senderId: senderId,
       localSequenceNumber: localSequenceNumber,
+      methodName: methodName,
       requestContent: requestContent,
     };
 
     this.requestQueue.push(requestMessage);
     // Broadcast the request message
     this.broadcast(JSON.stringify(requestMessage));
+
+    this.processQueues();
   }
 
-  changeSalePrice(productId, salePrice) {
+  getProductsOnSale(userID) {
+    var productsOnSale = [];
+    console.log(userID);
     for (var i = 0; i < this.productDataObject.length; i++) {
-      if (this.productDataObject[i].itemId == productId) {
-        this.productDataObject[i].salePrice = salePrice;
+      if (this.productDataObject[i].username == userID) {
+        productsOnSale.push(this.productDataObject[i]);
       }
     }
+    return productsOnSale;
+  }
+
+  addProduct(item) {
+    this.productDataObject.push(item);
     var newData2 = JSON.stringify(this.productDataObject);
-    fs.writeFile(
-      `../../ConfigsAndDB/databases/product_data_${this.id}.json`,
-      newData2,
-      (err) => {
+    fs.writeFile(`../../ConfigsAndDB/databases/product_data_${this.id}.json`, newData2, (err) => {
+      // Error checking
+      if (err) throw err;
+      console.log(`Node ${this.id}:Product data updated`);
+    });
+  }
+
+  removeItemFromSale(productId){
+    for (var i = 0; i < this.productDataObject.length; i++){
+        if (this.productDataObject[i].itemId == productId){
+            // console.log("splicing");
+            this.productDataObject.splice(i,1)
+        }       
+    }
+    var newData2 = JSON.stringify(this.productDataObject);
+    fs.writeFile(`../../ConfigsAndDB/databases/product_data_${this.id}.json`, newData2, (err) => {
         // Error checking
         if (err) throw err;
-        console.log("Product data updated");
-      }
-    );
-  }
+        console.log(`Node ${this.id}:Product data updated`);
+    });
+}
 }
 
 // ------------------main---------------------grpc----------------
@@ -199,12 +206,34 @@ const totalNodes = parseInt(process.argv[4]);
 
 var classObj = new Node(id, port, totalNodes);
 
-
 function getProductsOnSale(call, callback) {
-  products = productDB.getProductsOnSale();
+  products = classObj.getProductsOnSale(call.request.userID);
   newData = { responseType: "SUCCESS", data: products };
-  console.log("Getting products on sale");
-  callback(null, { status: JSON.stringify(newData) });
+  console.log("Got Products", products);
+  callback(null, {
+    responseType: newData.responseType,
+    items: newData.data,
+  });
+}
+
+function putItemOnSale(call, callback) {
+  var item = {
+    itemName: call.request.itemName,
+    itemDescription: call.request.itemDescription,
+    itemPrice: call.request.itemPrice,
+    quantity: call.request.quantity,
+    username: call.request.username,
+    itemId: call.request.itemId,
+    keywords: call.request.keywords,
+  };
+  console.log(item);
+  classObj.sendRequest(id, item, "addProduct");
+  newData = { responseType: "SUCCESS", data: "Item put on sale" };
+  console.log("Putting item on sale");
+  callback(null, {
+    responseType: newData.responseType,
+    message: newData.data,
+  });
 }
 
 function changeSalePrice(call, callback) {
@@ -222,21 +251,35 @@ function changeSalePrice(call, callback) {
   callback(null, { status: JSON.stringify(newData) });
 }
 
+function removeItemFromSale(call, callback) {
+
+  classObj.sendRequest(id,call.request.itemId, "removeItemFromSale");
+  newData = {
+    responseType: "SUCCESS",
+
+    data: "Item removed from sale",
+  };
+  console.log("Removed item from sale");
+  callback(null, {
+    responseType: newData.responseType,
+    message: newData.data,
+  });
+}
 
 function main() {
   var server = new grpc.Server();
   server.addService(productdb.ProductDB.service, {
-    changeSalePrice: changeSalePrice,
+    // changeSalePrice: changeSalePrice,
     getProductsOnSale: getProductsOnSale,
-    // putItemOnSale: putItemOnSale,
-    // removeItemFromSale: removeItemFromSale,
+    putItemOnSale: putItemOnSale,
+    removeItemFromSale: removeItemFromSale,
     // addProduct: addProduct,
     // searchItem: searchItem,
     // getProductSeller: getProductSeller,
     // addFeedback: addFeedback
   });
   server.bindAsync(
-    `0.0.0.0:${50052+port}`,
+    `0.0.0.0:${60052 + id}`,
     grpc.ServerCredentials.createInsecure(),
     () => {
       server.start();
@@ -245,7 +288,6 @@ function main() {
 }
 
 main();
-
 
 process.on("message", (msg) => {
   if (msg === "shutdown") {

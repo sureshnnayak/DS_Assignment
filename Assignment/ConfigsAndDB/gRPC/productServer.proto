@@ -9,7 +9,7 @@ service ProductDB {
   rpc getProductsOnSale (User) returns (Status3) {}
   rpc changeSalePrice (productId) returns (Status) {}
   rpc putItemOnSale(itemOnSale) returns (Status2) {}
-  rpc removeItemFromSale(itemList) returns (Status) {}
+  rpc removeItemFromSale(itemId) returns (Status2) {}
   rpc addProduct(itemList) returns (Status) {}
   rpc searchItem(item) returns (Status) {}
   rpc getProductSeller(itemList) returns (Status) {}
@@ -22,7 +22,8 @@ message itemOnSale {
   int32 itemPrice = 3;
   int32 quantity = 4;
   string username = 5;
-  repeated string keywords = 6;
+  string itemId = 6;
+  repeated string keywords = 7;
 }
 
 message Status2 {
@@ -33,6 +34,9 @@ message Status2 {
 message Status3 {
   string responseType = 1;
   repeated itemOnSale items = 2;
+}
+message itemId {
+  string itemId = 1;
 }
 
 message User {

@@ -16,5 +16,32 @@
     "feedbackPos": 0,
     "itemsSold": 0,
     "loginSessions": 0
+  },
+  {
+    "username": "haiyaa",
+    "password": "fuiyo",
+    "id": "haiyaa1681866833787",
+    "feedbackNeg": 0,
+    "feedbackPos": 0,
+    "itemsSold": 0,
+    "loginSessions": 0
+  },
+  {
+    "username": "uncle",
+    "password": "roger",
+    "id": "uncle1681867073801",
+    "feedbackNeg": 0,
+    "feedbackPos": 0,
+    "itemsSold": 0,
+    "loginSessions": 0
+  },
+  {
+    "username": "gautam",
+    "password": "thakur",
+    "id": "gautam1681867183468",
+    "feedbackNeg": 0,
+    "feedbackPos": 0,
+    "itemsSold": 0,
+    "loginSessions": 0
   }
 ]

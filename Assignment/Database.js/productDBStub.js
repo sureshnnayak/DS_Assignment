@@ -73,7 +73,8 @@ function putItemOnSale(productId){
 function removeItemFromSale(productId){
     for (var i = 0; i < productDataObject.length; i++){
         if (productDataObject[i].itemId == productId){
-            productDataObject[i].itemOnSale = "false"
+            console.log("splicing");
+            productDataObject.splice(i,1)
         }       
     }
     var newData2 = JSON.stringify(productDataObject);

@@ -31,8 +31,6 @@ const printOptions = () => {
   console.log("5. Put an item for sale");
   console.log("6. Remove an item from sale");
   console.log("7. Display items for sale");
-  // console.log("8. Run Average Response Time Test");
-  // console.log("9. Run Average Throughput Test");
 
   rl.question("Enter your option: ", (option) => {
     switch (option) {

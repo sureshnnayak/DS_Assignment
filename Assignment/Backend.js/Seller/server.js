@@ -32,7 +32,7 @@ var packageDefinitionProduct = protoLoader.loadSync(PROTO_PATH_PRODUCT, {
 });
 var productdb = grpc.loadPackageDefinition(packageDefinitionProduct).productdb;
 var clientProduct = new productdb.ProductDB(
-  "localhost:50052",
+  "localhost:60052",
   grpc.credentials.createInsecure()
 );
 
@@ -124,6 +124,7 @@ app.post("/addItemToSale", (req, res) => {
       itemPrice: req.body.itemPrice,
       quantity: req.body.quantity,
       username: req.body.username,
+      itemId: req.body.itemName + Date.now(),
       keywords: req.body.keywords,
     },
     function (err, response) {
@@ -140,14 +141,17 @@ app.post("/addItemToSale", (req, res) => {
 // ------------------removeItemFromSale---------------------??X----------------
 app.post("/removeItemFromSale", (req, res) => {
   // res.send('Hello World!')
-  clientProduct.removeItemFromSale(req.body.productID);
-  newData = {
-    responseType: "SUCCESS",
-    message: "Request processed successfully",
-  };
 
-  console.log("Removing item from sale");
-  res.send(200, newData);
+  clientProduct.removeItemFromSale(
+    {itemId:req.body.itemId},
+    function (err, response) {
+      console.log("status:", response);
+      res.send(200, {
+        requestType: response.requestType,
+        message: response.message,
+      });
+    }
+  );
 });
 
 // ------------------getProductsOnSale---------------------??X----------------

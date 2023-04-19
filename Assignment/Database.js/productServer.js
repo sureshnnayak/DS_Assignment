@@ -38,6 +38,7 @@ function putItemOnSale(call, callback) {
     itemPrice: call.request.itemPrice,
     quantity: call.request.quantity,
     username: call.request.username,
+    itemId:call.request.itemId,
     keywords: call.request.keywords,
   };
   console.log(item);
@@ -58,8 +59,11 @@ function removeItemFromSale(call, callback) {
 
     data: "Item removed from sale",
   };
-  console.log("Removing item from sale");
-  callback(null, { status: JSON.stringify(newData) });
+  console.log("Removed item from sale");
+  callback(null, {
+    responseType: newData.responseType,
+    message: newData.data,
+  });
 }
 
 function addProduct(call, callback) {
