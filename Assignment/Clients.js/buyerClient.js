@@ -58,7 +58,6 @@ const printOptions = (serverConnection) => {
 	console.log("9. Make purchase");
 	console.log("10. Provide feedback");
 	console.log("11. Get seller rating");
-	console.log("12. Get buyer purchase history");
 	console.log("13. Exit");
 	rl.question("Enter your option:", (option) => {
 		switch(option){
@@ -289,29 +288,9 @@ const printOptions = (serverConnection) => {
 					});					});
 				break;
 
-			case "12":
-				console.log("View purchase history");
-				rl.question("Enter user id: ", (userId) => {
-					const data = {
-						userId: userId
-					};
-					axios
-					.post("http://localhost:1337/getBuyersPurchaseHistory", data)
-					.then(function (response) {
-					  console.log(response.data);
-					  printOptions();
-					})
-					.catch(function (error) {
-					  console.log(error);
-					});					});
-				break;
-
-			case "13":
 
 			default:
-				console.log("Exiting...");
-				// serverConnection.destroy();
-				//break;
+				console.log("Invalid Input. Exiting...");
 				return;
 
 		}
@@ -320,60 +299,32 @@ const printOptions = (serverConnection) => {
 
 
 
-function handleResponce(res, buyerServer){
-	switch(res.responceType){
-		case "SUUCESS":
-			//console.log(res.meaaage);
-			break;
-		case "ERROR":
-			console.log(res.message);
-			break;
-		case "DISPLAY_ITEMS":
-		case "DISPLAY_CART":
-		case "DISPLAY_PURCHASE_HISTORY":
-			console.log(res.items);
-			break;
-		case "DISPLAY_FEEDBACK":
-			console.log(res.feedback);
-			break;
-	}
-	printOptions(buyerServer);
-}
-
-
-
-
-// function getConnection(){
-
-// 	var buyerServer = new net.Socket();
-// 	buyerServer.connect(1337, 'localhost', function() {
-// 		console.log('Connected');
-// 		//buyerServer.write(JSON.stringify(clData));
-// 	});
-
-// 	buyerServer.on('data', function(data) {
-// 		console.log('Received: ' + data);
-// 		res = JSON.parse(data);
-// 		handleResponce(res,buyerServer);
-// 		//buyerServer.destroy(); // kill buyerServer after buyerServer's response
-// 	});
-
-// 	buyerServer.on('close', function() {
-// 		console.log('Connection closed');
-// 	});
-
-// 	buyerServer.on('error', function (error) {
-// 		console.error(JSON.stringify(error));
-// 	});
-// 	return buyerServer;
+// function handleResponce(res, buyerServer){
+// 	switch(res.responceType){
+// 		case "SUUCESS":
+// 			//console.log(res.meaaage);
+// 			break;
+// 		case "ERROR":
+// 			console.log(res.message);
+// 			break;
+// 		case "DISPLAY_ITEMS":
+// 		case "DISPLAY_CART":
+// 		case "DISPLAY_PURCHASE_HISTORY":
+// 			console.log(res.items);
+// 			break;
+// 		case "DISPLAY_FEEDBACK":
+// 			console.log(res.feedback);
+// 			break;
+// 	}
+// 	printOptions(buyerServer);
 // }
 
 
-function sleep(ms) {
-	return new Promise((resolve) => {
-	  setTimeout(resolve, ms);
-	});
-  }
+// function sleep(ms) {
+// 	return new Promise((resolve) => {
+// 	  setTimeout(resolve, ms);
+// 	});
+//   }
 
 const start = async () => {
 	console.log("Welcome to the shopping system");
