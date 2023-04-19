@@ -70,6 +70,7 @@ class TCPRaft extends LifeRaft {
           var packet = await raft.packet('data', newData);
           console.log('INTI: prepeared dara for commiting :', packet);
           raft.message( LifeRaft.FOLLOWER, packet, printMsg);
+          commitData(data.data.function, data.data.data)
         } else if (data && data.data && data.data.type == 'commit') {
           commitData(data.data.function, data.data.data)
           //console.log("AFTER COMMIT");
@@ -125,6 +126,7 @@ class TCPRaft extends LifeRaft {
             }
           );
           raft.message( LifeRaft.FOLLOWER, packet, printMsg);
+          commitData(data.data.function, data.data.data)
         }
         else if (data && data.data && data.data.type ==='commit') {
           //console.log('got a commit message :', data);
