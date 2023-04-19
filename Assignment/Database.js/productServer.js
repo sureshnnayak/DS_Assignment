@@ -15,10 +15,13 @@ var productdb = grpc.loadPackageDefinition(packageDefinition).productdb;
 var productDB = require("./productDBStub");
 // ------------- END----------------
 function getProductsOnSale(call, callback) {
-  products = productDB.getProductsOnSale();
+  products = productDB.getProductsOnSale(call.request.userID);
   newData = { responseType: "SUCCESS", data: products };
-  console.log("Getting products on sale");
-  callback(null, { status: JSON.stringify(newData) });
+  console.log("Got Products",products);
+  callback(null, {
+    responseType: newData.responseType,
+    items: newData.data,
+  });
 }
 
 function changeSalePrice(call, callback) {

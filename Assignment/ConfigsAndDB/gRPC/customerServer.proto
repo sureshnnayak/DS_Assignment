@@ -44,4 +44,5 @@ message LoginStatus {
   string responseType = 1;
   string message = 2;
   string sessionID = 3;
+  string userID = 4;
 }

@@ -86,12 +86,14 @@ function loginCustomer(call, callback) {
       responseType: "SUCCESS",
       message: "Request processed successfully",
       sessionID : user.sessionID,
+      userID: user.id
     };
   } else {
     var newData = {
       responseType: "FAILURE",
       message: "Invalid username or password",
       sessionID: null,
+      userID: null
     };
   }
   console.log("sending response:");
@@ -100,6 +102,7 @@ function loginCustomer(call, callback) {
     responseType: newData.responseType,
     message: newData.message,
     sessionID: newData.sessionID,
+    userID: newData.userID
   });
 }
 

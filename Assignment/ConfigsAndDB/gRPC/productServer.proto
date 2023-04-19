@@ -6,7 +6,7 @@ package productdb;
 // The greeting service definition.
 service ProductDB {
   // Sends a greeting
-  rpc getProductOnSale (Empty) returns (Status) {}
+  rpc getProductsOnSale (User) returns (Status3) {}
   rpc changeSalePrice (productId) returns (Status) {}
   rpc putItemOnSale(itemOnSale) returns (Status2) {}
   rpc removeItemFromSale(itemList) returns (Status) {}
@@ -15,7 +15,31 @@ service ProductDB {
   rpc getProductSeller(itemList) returns (Status) {}
   rpc addFeedback(feedback) returns (Status){}
 }
-message Empty {}
+
+message itemOnSale {
+  string itemName = 1;
+  string itemDescription = 2;
+  int32 itemPrice = 3;
+  int32 quantity = 4;
+  string username = 5;
+  repeated string keywords = 6;
+}
+
+message Status2 {
+  string responseType = 1;
+  string message = 2;
+}
+
+message Status3 {
+  string responseType = 1;
+  repeated itemOnSale items = 2;
+}
+
+message User {
+  string userID = 1;
+}
+
+
 message feedback {
   string data = 1;
 }
@@ -26,14 +50,7 @@ message productName {
 message itemList {
     string data = 1;
 }
-message itemOnSale {
-    string itemName = 1;
-    string itemDescription = 2;
-    string itemPrice = 3;
-    string quantity = 4;
-    string username = 5;
-    repeated string keywords = 6;
-}
+
 
 message item {
     string data = 1;
@@ -54,7 +71,3 @@ message Status {
 }
 
 
-message Status2 {
-  string responseType = 1;
-  string message = 2;
-}

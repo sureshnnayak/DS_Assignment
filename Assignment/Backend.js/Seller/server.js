@@ -86,6 +86,9 @@ app.post("/login", (req, res) => {
       res.send(200, {
         requestType: response.requestType,
         message: response.message,
+        sessionID: response.sessionID,
+        userID: response.userID
+
       });
     }
   );
@@ -150,13 +153,18 @@ app.post("/removeItemFromSale", (req, res) => {
 // ------------------getProductsOnSale---------------------??X----------------
 app.post("/getProductsOnSale", (req, res) => {
   // res.send('Hello World!')
-  productOnSale = clientProduct.getProductOnSale(req.body.username);
-  newData = {
-    responseType: "SUCCESS",
-    data: productOnSale,
-  };
-  console.log("Displaying items for sale");
-  res.send(200, newData);
+  clientProduct.getProductsOnSale(
+    {
+      userID: req.body.userID,
+    },
+    function (err, response) {
+      console.log("status:", response);
+      res.send(200, {
+        requestType: response.requestType,
+        items: response.items
+      });
+    }
+  );
 });
 
 app.listen(1338, () => {

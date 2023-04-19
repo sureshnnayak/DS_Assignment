@@ -44,10 +44,11 @@ function addFeedback(data){
         }
     }
 }
-function getProductOnSale(keywords){
+function getProductsOnSale(userID){
     var productsOnSale = [];
+    console.log(userID);
     for (var i = 0; i < productDataObject.length; i++){
-        if ( productDataObject[i].keywords.includes(keywords)){
+        if ( productDataObject[i].username == userID){
             productsOnSale.push(productDataObject[i]);
         }
     }
@@ -113,7 +114,7 @@ function addProduct(item){
 
 
 module.exports = {  updateProductQuantity,
-     getProductOnSale, 
+     getProductsOnSale, 
      changeSalePrice, 
      putItemOnSale, 
      removeItemFromSale,

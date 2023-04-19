@@ -9,7 +9,7 @@ const rl = readline.createInterface({
   terminal: false,
 });
 
-var uname = "";
+var uname = null;
 
 const {
   createAcccountMSG,
@@ -71,7 +71,7 @@ const printOptions = () => {
               .post("http://localhost:1338/login", data)
               .then(function (response) {
                 console.log(response.data);
-                uname = username;
+                uname = response.data.userID;
                 printOptions();
               })
               .catch(function (error) {
@@ -118,35 +118,42 @@ const printOptions = () => {
         });
         break;
       case "5":
-        console.log("Put an item for sale");
-        rl.question("Enter item name: ", (itemName) => {
-          rl.question("Enter item description: ", (itemDescription) => {
-            rl.question("Enter item price: ", (itemPrice) => {
-              rl.question("Enter item Quantity: ", (Quantity) => {
-                rl.question("Enter item Keywords: ", (Keywords) => {
-                  let data = {
-                    itemName: itemName,
-                    itemDescription: itemDescription,
-                    itemPrice: itemPrice,
-                    quantity: Quantity,
-                    username: uname,
-                    keywords:Keywords.split(/\s+/)
-                  };
+        if (uname) {
+          console.log("Put an item for sale");
+          rl.question("Enter item name: ", (itemName) => {
+            rl.question("Enter item description: ", (itemDescription) => {
+              rl.question("Enter item price: ", (itemPrice) => {
+                rl.question("Enter item Quantity: ", (Quantity) => {
+                  rl.question("Enter item Keywords: ", (Keywords) => {
+                    let data = {
+                      itemName: itemName,
+                      itemDescription: itemDescription,
+                      itemPrice: Number(itemPrice),
+                      quantity: Number(Quantity),
+                      username: uname,
+                      keywords: Keywords.split(/\s+/),
+                    };
 
-                  axios
-                    .post("http://localhost:1338/addItemToSale", data)
-                    .then(function (response) {
-                      console.log(response.data);
-                      printOptions();
-                    })
-                    .catch(function (error) {
-                      console.log(error);
-                    });
+                    axios
+                      .post("http://localhost:1338/addItemToSale", data)
+                      .then(function (response) {
+                        console.log(response.data);
+                        printOptions();
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                      });
+                  });
                 });
               });
             });
           });
-        });
+        } else {
+          console.log("********************");
+          console.log("Please Login First");
+          console.log("********************");
+          printOptions();
+        }
         break;
       case "6":
         console.log("Remove an item from sale");
@@ -167,18 +174,25 @@ const printOptions = () => {
         });
         break;
       case "7":
-        {
+        if (uname) {
           console.log("Display items for sale");
-          let data = {};
+          let data = {
+            userID: uname,
+          };
           axios
             .post("http://localhost:1338/getProductsOnSale", data)
             .then(function (response) {
-              console.log(response.data);
+              console.log(response.data.items);
               printOptions();
             })
             .catch(function (error) {
               console.log(error);
             });
+        } else {
+          console.log("********************");
+          console.log("Please Login First");
+          console.log("********************");
+          printOptions();
         }
         break;
       case "8":
