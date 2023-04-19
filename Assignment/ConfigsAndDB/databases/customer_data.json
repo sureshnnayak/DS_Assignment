@@ -1,11 +1,1 @@
-[
-    {
-        "username": "suresh",
-        "password": "suresh",
-        "id": "suresh1681094271251",
-        "itemsBought": 0,
-        "sessionID": null,
-        "cart": [],
-        "loginSessions": 0
-    }
-]
+[{"username":"suresh","password":"suresh","id":"suresh1681094271251","itemsBought":0,"sessionID":null,"cart":[],"loginSessions":0},{"username":"eno","password":"eno","id":"eno1681865738455","feedbackNeg":0,"feedbackPos":0,"itemsSold":0,"loginSessions":0}]
