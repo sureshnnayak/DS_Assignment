@@ -16,5 +16,14 @@
     "feedbackPos": 0,
     "itemsSold": 0,
     "loginSessions": 0
+  },
+  {
+    "username": "Scarlett",
+    "password": "johansen",
+    "id": "Scarlett1681874348553",
+    "itemsBought": 0,
+    "sessionID": null,
+    "cart": [],
+    "loginSessions": 0
   }
 ]
