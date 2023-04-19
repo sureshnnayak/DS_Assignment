@@ -9,7 +9,10 @@ service CustomerDB {
   rpc loginCustomer (Credentials) returns (LoginStatus) {}
   rpc logoutCustomer (sessionID) returns (Status) {}
   rpc isLogedIn (sessionID) returns (Status) {}
-  rpc addProduct (productToAdd) returns (Status) {}
+  //rpc addProduct (productToAdd) returns (Status) {}
+  rpc addToCart (productToAdd) returns (Status) {}
+  rpc clearCart (sessionID) returns (Status) {}
+  rpc getCart (sessionID) returns (Cart) {}
 }
 
 message productToAdd {
@@ -45,4 +48,9 @@ message LoginStatus {
   string message = 2;
   string sessionID = 3;
   string userID = 4;
+}
+message Cart {
+  string responseType = 1;
+  string message = 2;
+  string cart = 3;
 }

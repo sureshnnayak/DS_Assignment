@@ -70,13 +70,48 @@ const login = async (data) => {
     );
   });
 };
+const addToCart = async (data) =>{
+  console.log("addToCart  backendStub");
+  return new Promise((resolve, reject) => {
+    clientCustomer.addToCart(
+      { sessionID: data.sessionID, productID: data.productID, quantity: data.quantity },
+      function (err, response) {
+        resolve(response);
+      }
+    );
+  });
+}
+const clearCart = async (data) =>{
+  console.log("clearCart  backendStub");
+  return new Promise((resolve, reject) => {
+    clientCustomer.clearCart(
+      { sessionID: data.sessionID},
+      function (err, response) {
+        resolve(response);
+      }
+    );
+  });
+}
 
-const isLogedIn = async (data) => {
+const getCart = async (data) =>{
+  console.log("getCart  backendStub");
+  return new Promise((resolve, reject) => {
+    clientCustomer.getCart(
+      { sessionID: data.sessionID},
+      function (err, response) {
+        resolve(response);
+      }
+    );
+  });
+}
+
+const isLogedIn = (data) => {
   console.log("isLogedIn  backendStub", data);
   return new Promise((resolve, reject) => {
     clientCustomer.isLogedIn(
       {sessionID: data.sessionID },
       function (err, response) {
+        console.log("responce:", response);
         resolve(response);
       }
     );
@@ -201,6 +236,7 @@ function getFeedback(data) {
   });
 }
 
+
 module.exports = {
   addUser,
   login,
@@ -208,6 +244,9 @@ module.exports = {
   logout,
   soapCall,
   getUser,
+  addToCart,
+  clearCart,
+  getCart,
   searchProducts,
   getTransactions,
   addTransactions,

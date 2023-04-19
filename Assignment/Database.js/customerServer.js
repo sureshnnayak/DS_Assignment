@@ -355,15 +355,15 @@ function logoutCustomer(call, callback) {
   callback(null, resp);
 }
 
-function isLogedIn(call, callback) {
+async function isLogedIn(call, callback) {
   var reqdata = {
     sissionID: call.request.sessionID,
   };
   resp = RESPSUCESS;
   console.log("request for isLoggedin :", call.request);
-  user = customerDB.getUser(null,call.request.sessionID);
-  //result = customerDB.isLogedIn(call.request.sessionID);
-  console.log("obtained from DB:", result);
+  user = await customerDB.getUser(null,call.request.sessionID);
+ 
+  console.log("obtained from DB:", user);
   if (user == null) {
     resp = {
       responseType: "FAILURE",
@@ -375,14 +375,14 @@ function isLogedIn(call, callback) {
 }
 
 
-// ------------------addProduct---------------------grpc----------------
-function addProduct(call, callback) {
+// ------------------addToCart---------------------grpc----------------
+async function addToCart(call, callback) {
   var resp = RESPSUCESS;
 
-  console.log("request for addProduct :", call.request);
-  user = customerDB.getUser(null,call.request.sessionID);
+  console.log("request for addToCart :", call.request);
+  user = await customerDB.getUser(null,call.request.sessionID);
   //user = customerDB.isLogedIn(call.request.sessionID);
-  console.log("obtained from DB:", result);
+  console.log("obtained from DB:", user);
   if (user != null) 
   {
     user.cart.push(call.request.productID);
@@ -400,6 +400,51 @@ function addProduct(call, callback) {
   callback(null, resp);
 }
 
+async function clearCart(call, callback) {
+  var resp = RESPSUCESS;
+  console.log("request for clearCart :", call.request);
+  user = await customerDB.getUser(null,call.request.sessionID);
+  console.log("obtained from DB:", user);
+  if (user != null)
+  {
+    user.cart = [];
+    // update the session ID in the DB
+    sendPacketToLeader("updateUser", user);
+  }
+  if (user == null) {
+    resp = {
+      responseType: "FAILURE",
+      message: "Invalid session ID",
+    };
+  }
+  console.log("sending response:", resp);
+  callback(null, resp);
+}
+async function  getCart(call, callback) {
+  var resp = RESPSUCESS;
+  console.log("request for getCart :", call.request);
+  user = await customerDB.getUser(null,call.request.sessionID);
+  console.log("obtained from DB:", user);
+  if (user != null)
+  {
+    resp = {
+      responseType: "SUCCESS",
+      message: "Request processed successfully",
+      cart: user.cart.toString(),
+    };
+  }
+  if (user == null) {
+    resp = {
+      responseType: "FAILURE",
+      message: "Invalid session ID",
+    };
+  }
+  console.log("sending response:", resp);
+  callback(null, resp);
+}
+
+
+
 
 
 // ------------------main---------------------grpc----------------
@@ -411,7 +456,10 @@ function main() {
     loginCustomer: loginCustomer,
     logoutCustomer: logoutCustomer,
     isLogedIn: isLogedIn,
-    addProduct: addProduct,
+    addToCart: addToCart,
+    clearCart: clearCart,
+    getCart: getCart,
+    
   });
   server.bindAsync(
    // "0.0.0.0:50051",

@@ -199,7 +199,7 @@ const printOptions = (serverConnection) => {
 			case "7":{
 				console.log("Clear the shopping cart");
 				const data = {
-					userId: userId,
+					sessionID: sessionID,
 				};
 				axios
 				.post("http://localhost:1337/clearCart", data)
@@ -215,10 +215,9 @@ const printOptions = (serverConnection) => {
 			case "8":
 				{
 					console.log("Display shopping cart");
-				const data = {
-					userId: userId,
-					
-				};
+					const data = {
+						sessionID: sessionID,
+					};
 				axios
 				.post("http://localhost:1337/displayCart", data)
 				.then(function (response) {
@@ -233,7 +232,7 @@ const printOptions = (serverConnection) => {
 			case "9":{
 				console.log("Make purchase");
 				const data = {
-					userId: userId
+					sessionID: sessionID,
 				};
 				axios
 				.post("http://localhost:1337/makePurchase", data)

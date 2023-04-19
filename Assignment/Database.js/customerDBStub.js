@@ -43,14 +43,17 @@ function updateUser(user) {
 
 function getUser(username,sessionID) {
   console.log(username, sessionID);
+  var user = null;
   for (var i = 0; i < customerDataObject.length; i++) {
     if (sessionID && customerDataObject[i].sessionID == sessionID) {
-      console.log("sessionID", customerDataObject[i]);
-      return customerDataObject[i] ;
+      user = customerDataObject[i]
+      //console.log("sessionID",user);
+      return user;
     }
     else if (customerDataObject[i].username == username) {
-      console.log("username", customerDataObject[i]);
-      return customerDataObject[i];
+      user = customerDataObject[i]
+      //console.log("username", user);
+      return user;
     }
   }
   return null;
